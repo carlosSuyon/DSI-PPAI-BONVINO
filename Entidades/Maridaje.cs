@@ -14,6 +14,10 @@ namespace PPAI.Entidades
         public Maridaje(string descripcion,string nombre){
             this.descripcion = descripcion; this.nombre = nombre;
         }
+
+        public string Descripcion { get => descripcion; set => descripcion = value; }
+        public string Nombre { get => nombre; set => nombre = value; }
+
         public Boolean sosMaridaje()
         {
             Boolean x = false;

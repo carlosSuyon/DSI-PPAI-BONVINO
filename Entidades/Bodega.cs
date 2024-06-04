@@ -7,7 +7,6 @@ public class Bodega()
     //atrbitutos
     private string nombre;
     private string descripcion;
-    //verificar tipo de dato
     private DateTime  fechaUltimaActualizacion;
     private string  periodoActualizacion;
     private string  historia;
@@ -18,6 +17,7 @@ public class Bodega()
     public DateTime FechaUltimaActualizacion { get => fechaUltimaActualizacion; set => fechaUltimaActualizacion = value; }
     public string PeriodoActualizacion { get => periodoActualizacion; set => periodoActualizacion = value; }
     public string Historia { get => historia; set => historia = value; }
+    public List<Vino> MisVinos { get => misVinos; set => misVinos = value; }
 
     //constructor
     public Bodega(string nombre, string descripcion,DateTime fechaUltimaActualizacion ,string periodoActualizacion, string historia) : this()
@@ -27,10 +27,11 @@ public class Bodega()
         this.fechaUltimaActualizacion = fechaUltimaActualizacion;
         this.periodoActualizacion = periodoActualizacion;
         this.historia = historia;
+        this.misVinos = [];
         
     }
+
     //metodos
-    
     public Boolean esParaActualizar(DateTime fechaActual)
     {
         Boolean x = false;
@@ -49,25 +50,36 @@ public class Bodega()
         {
             if (unVinoMio.sosVinoParaActualizar(vinoAActulizar.getNombre()))
             {
-                //faltan los gets de clase vino
-                /*
-                unVinoMio.setPrecio(vinoAActulizar.precio);
-                unVinoMio.setNotaCata(vinoAActulizar.notaCata);
-                unVinoMio.setImagenEtiqueta(vinoAActulizar.imagenEtiqueta);
+                
+                unVinoMio.setPrecio(vinoAActulizar.PrecioARS);
+                unVinoMio.setNotaCata(vinoAActulizar.NotaDeCataBodega);
+                unVinoMio.setImagenEtiqueta(vinoAActulizar.ImagenEtiqueta);
                 unVinoMio.setFechaActulizacion(fechaActual);
-                */
+                
              }
         }
     }
     public Boolean tieneVino(Vino unVino){
-        foreach (Vino vinoBodega in misVinos) {
+        foreach (Vino vinoBodega in this.misVinos) {
             return (vinoBodega.sosEsteVino(unVino));
 
         }
         return false;   
     }
 
-    public void actualizarVino() { }
+    public void actualizarVino(Vino vinoParaActualizar) {
+        foreach (Vino v in this.MisVinos)
+        {
+            if (v.sosVinoParaActualizar(vinoParaActualizar.Nombre))
+            {
+                v.PrecioARS = vinoParaActualizar.PrecioARS;
+                v.NotaDeCataBodega = vinoParaActualizar.NotaDeCataBodega;
+                v.ImagenEtiqueta = vinoParaActualizar.ImagenEtiqueta;
+                v.FechaActualizacion = vinoParaActualizar.FechaActualizacion; 
+            }
+        }
+
+    }
 
     public string getNombre()
     {

@@ -20,5 +20,9 @@ namespace PPAI.Entidades
             this.porcentajeComposicion = porcentajeComposicion;
             this.tipoUva = tipoUva;
         }
+
+        public string Nombre { get => nombre; set => nombre = value; }
+        public string Descripcion { get => descripcion; set => descripcion = value; }
+        public int PorcentajeComposicion { get => porcentajeComposicion; set => porcentajeComposicion = value; }
     }
 }

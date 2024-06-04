@@ -47,21 +47,31 @@ namespace PPAI
                     fila.Cells.Add(nombreBodega);
                     gdrBodegasDisponibles.Rows.Add(fila);
                 }
-                // alert para que el adm de bomvino eliga una bodega (click en fila de grilla)
-                this.solicitarSeleccionBodega();
+                
             }
+            // alert para que el adm de bomvino eliga una bodega (click en fila de grilla)
+            this.solicitarSeleccionBodega();
         }
 
         public void solicitarSeleccionBodega()
         {
-            MessageBox.Show("Para seleccionar una boda haga click sobre su nombre");
+            
+            MessageBox.Show("Para seleccionar una bodega haga click sobre su nombre");
         }
-        public void tomarSelecciónBodega() { }
+        public void tomarSelecciónBodega(string bodegaSeleccionada) {
+            this.miGestor.tomarSelecciónBodega(bodegaSeleccionada);
+        }
         public void mostrarResumenVinosImportados() { }
 
         private void bodegasDisponibles_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             //
+            string bodegaSeleccionada =
+            gdrBodegasDisponibles.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+
+            MessageBox.Show("Se selecciono la bodega: " + bodegaSeleccionada);
+            tomarSelecciónBodega(bodegaSeleccionada);
+           
         }
 
         private void label2_Click(object sender, EventArgs e)

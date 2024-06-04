@@ -18,6 +18,14 @@ namespace PPAI.Entidades
 
         private List<Maridaje> maridaje;
         private List<Varietal> varietal;
+
+        public string Añada { get => añada; set => añada = value; }
+        public DateTime FechaActualizacion { get => fechaActualizacion; set => fechaActualizacion = value; }
+        public string ImagenEtiqueta { get => imagenEtiqueta; set => imagenEtiqueta = value; }
+        public string Nombre { get => nombre; set => nombre = value; }
+        public string NotaDeCataBodega { get => notaDeCataBodega; set => notaDeCataBodega = value; }
+        public int PrecioARS { get => precioARS; set => precioARS = value; }
+
         //constructor
         public Vino(string añada, DateTime fechaActualización, string imagenEtiqueta, string nombre, string notaDeCataBodega, int precioARS)
         {
@@ -33,11 +41,11 @@ namespace PPAI.Entidades
         //metodos
         public void crearVarietal() { }
         public Boolean sosEsteVino(Vino vino) {
-            /*
-            if (this.nombre = vino.getNombre() )
+            
+            if (vino.nombre == this.nombre )
             {
                 return true;
-            }*/
+            }
             return false;
         }
         public Boolean sosVinoParaActualizar(string nombreDeVinoParaActualizar){
@@ -48,7 +56,9 @@ namespace PPAI.Entidades
             return false;
         }
         public void esDeBodega() { }
-        public void esActualizable() { }
+        public Boolean esActualizable(){
+            return false;   
+        }
         public String getNombre(){ 
             return this.nombre;
         }

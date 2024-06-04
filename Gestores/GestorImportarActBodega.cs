@@ -11,13 +11,14 @@ namespace PPAI.Gestores
 {
     public class GestorImportarActBodega
     {
-        //atrbutos
+        //atributos
         private PantallaImportadorActBodega pantalla;
         private Bodega bodegaElegida;
         private List<Bodega> bodegas;
         private List<Enofilo> enofilosSeguidores;
         private List<string> enofilosANotificar;
         private List<Vino> vinosImportados;
+        private List<Vino> vinosListoParaActualizar;
         private List<Maridaje> maridajes;
         private List<TipoUva> tiposUva;
 
@@ -28,7 +29,9 @@ namespace PPAI.Gestores
         public GestorImportarActBodega() { }
         public GestorImportarActBodega(PantallaImportadorActBodega pantalla){
             this.bodegas = new List<Bodega>();  
-            this.tiposUva = new List<TipoUva>();    
+            this.tiposUva = new List<TipoUva>(); 
+            this.vinosImportados = new List<Vino>();
+            this.vinosListoParaActualizar = new List<Vino>();   
             this.load();
             this.pantalla = pantalla;
         }
@@ -109,25 +112,67 @@ namespace PPAI.Gestores
         {
             // tomar la fecha actual
             DateTime x = DateTime.Now.Date;
-            MessageBox.Show(x.ToShortDateString());
+            //MessageBox.Show(x.ToShortDateString());
             return x;
         }
-
-        public void obtenerActualizacionesVinosBodega()
+        public void tomarSelecciónBodega(string bodegaSeleccionada)
         {
-            // buscar como programar y luego conectarse a un API
-            //interfazAPIBodega.obtenerActualizacionesVinos();
-
-
+            // buscar segun nombre bodega seleccionada y crear el objeto
+            foreach (Bodega  b in this.bodegas)
+            {
+                if (bodegaSeleccionada == b.Nombre)
+                {
+                    this.bodegaElegida = b;
+                }
+            }
         }
 
-        public void ActulizarCaracteristicasVinoExistente() { }
+        public void obtenerActualizacionesBodega()
+        {
+            //buscar los vinos del sistema bodega,usando la API
+            this.vinosImportados =  this.interfazAPIBodega.obtenerActualizacionesBodega();
+            this.obtenerVinosAActualizar();
+        }
+        public void obtenerVinosAActualizar()
+        {
+            foreach (Vino v in this.vinosImportados)
+            {
+                if (bodegaElegida.tieneVino(v))
+                {
+                    this.vinosListoParaActualizar.Add(v);
+                }
+            }
 
+        }
+        public void crearOActualizarVinos()
+        {
+            foreach (Vino v in this.vinosImportados)
+            {
+                //valida para c/u de los vinos importados es un vino a actulizar en la bodega seleccionada
+                if (vinosListoParaActualizar.Contains(v))
+                {
+                    this.actualizarVino(v);
+                }
+            }
+        }
+        public void actualizarVino(Vino v) {
+
+            this.bodegaElegida.actualizarVino(v);
+        }
+
+        public void hayQueCrearVino() { }
+
+        public void buscarMaridaje() { }
+        public void buscarTipoUva() { }
+        public void crearVino() { }
+
+        
+        public void actualizarFechaActualizacionBodega() { }
         public void buscarSeguidoresDeBodega()
         {
             foreach (Enofilo enofilo in this.enofilosSeguidores)
             {
-                if (enofilo.sosSeguidorBodega(bodegaElegida))
+                if (enofilo.sosSeguidorBodega(this.bodegaElegida))
                 {
                     // corregir en el diagrama de secuencia el metodo *notificarNovedadVinoParaBodega(), no lleva asterisco
                     enofilosANotificar.Add(enofilo.getNombreUsuario());
@@ -135,42 +180,7 @@ namespace PPAI.Gestores
             }
 
             this.interfazNotificacionPush.notificarNovedadVinoParaBodega(enofilosANotificar);
-        }
-        
-        public void tomarSelecciónBodega(string bodegaSeleccionada)
-        {
-            // buscar segun nombre bodega seleccionada y crear el objeto
-        }
-        public void obtenerActualizacionesBodega() {
-            //buscar los vinos del sistema bodega,usando la API
-            List<Vino> vinosSistemaBodega;
-            vinosSistemaBodega =  this.interfazAPIBodega.obtenerActualizacionesBodega();
-            this.definirVinosAActualizar(vinosSistemaBodega);
-        }
-        public void definirVinosAActualizar(List<Vino> vinosSistemaBodega) {
-            
-            //
-           
-        }
-        public void crearOActualizarVinos(){
-            
-        }
-        public void actualizarVino() { }
-        public void hayQueCrearVino() { }
-        public void buscarMaridaje() { }
-        public void buscarTipoUva() { }
-        public void crearVino() { }
-        public void actualizarFechaActualizacionBodega() { }
-        public void buscarSeguidoresBodega(){
-            foreach (Enofilo enofiloDelSitema in this.enofilosSeguidores)
-            {
-                if (enofiloDelSitema.sosSeguidorBodega(this.bodegaElegida))
-                {
-                    
-                }
-                
-            }
-        }
+        }             
         public void finCU() {
             MessageBox.Show("Fin CU.");
             pantalla.Close();
