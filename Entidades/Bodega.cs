@@ -35,9 +35,10 @@ public class Bodega()
     public Boolean esParaActualizar(DateTime fechaActual)
     {
         Boolean x = false;
-         
+        int diasDesdeUltimaActualizacion = (fechaActual - this.FechaUltimaActualizacion).Days;
+        int diasPeriodoActualizacion = this.PeriodoActualizacion * 30; // Aproximación de 30 días por mes
 
-        if ((this.fechaUltimaActualizacion ) <= fechaActual)
+        if (diasDesdeUltimaActualizacion >= diasPeriodoActualizacion)
         {
             x = true;
         }
@@ -60,8 +61,12 @@ public class Bodega()
         }
     }
     public Boolean tieneVino(string nombreVino){
-        foreach (Vino vinoBodega in this.misVinos) {
-            return (vinoBodega.sosEsteVino(nombreVino));
+        //si el nombreVino del vino importado coincide con el nombre de algun vino de la coleccion de vino de la bodega
+        foreach (Vino vinoDeBodega in this.misVinos) {
+           if (vinoDeBodega.sosEsteVino(nombreVino))
+            {
+                return true;
+            }
             
         }
         return false;   

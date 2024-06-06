@@ -26,6 +26,7 @@ namespace PPAI.Entidades
         public string NotaDeCataBodega { get => notaDeCataBodega; set => notaDeCataBodega = value; }
         public int PrecioARS { get => precioARS; set => precioARS = value; }
         public List<Maridaje> Maridaje { get => maridaje; set => maridaje = value; }
+        public List<Varietal> Varietal { get => varietal; set => varietal = value; }
 
         //constructor
         public Vino(string añada, DateTime fechaActualización, string imagenEtiqueta, string nombre, string notaDeCataBodega, int precioARS)
