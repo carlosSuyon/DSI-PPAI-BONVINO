@@ -65,7 +65,7 @@
             gdrBodegasDisponibles.Name = "gdrBodegasDisponibles";
             gdrBodegasDisponibles.RowHeadersWidth = 62;
             gdrBodegasDisponibles.ScrollBars = ScrollBars.None;
-            gdrBodegasDisponibles.Size = new Size(278, 191);
+            gdrBodegasDisponibles.Size = new Size(278, 215);
             gdrBodegasDisponibles.TabIndex = 1;
             gdrBodegasDisponibles.CellContentClick += bodegasDisponibles_CellContentClick;
             // 
@@ -113,7 +113,7 @@
             gdrVinosBodega.Name = "gdrVinosBodega";
             gdrVinosBodega.RowHeadersWidth = 62;
             gdrVinosBodega.ScrollBars = ScrollBars.None;
-            gdrVinosBodega.Size = new Size(464, 191);
+            gdrVinosBodega.Size = new Size(512, 215);
             gdrVinosBodega.TabIndex = 4;
             gdrVinosBodega.Visible = false;
             // 
@@ -123,7 +123,7 @@
             dataGridViewTextBoxColumn1.MinimumWidth = 8;
             dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
             dataGridViewTextBoxColumn1.Resizable = DataGridViewTriState.False;
-            dataGridViewTextBoxColumn1.Width = 125;
+            dataGridViewTextBoxColumn1.Width = 175;
             // 
             // FechaActulizacion
             // 

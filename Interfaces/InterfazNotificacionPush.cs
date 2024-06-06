@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PPAI.Interfaces
 {
-    public interface InterfazNotificacionPush
+    public class InterfazNotificacionPush
     {
         public void notificarNovedadVinoParaBodega(List<string> nombreDeEnofilosANotificar)
         {

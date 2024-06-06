@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PPAI.Interfaces
 {
-    internal class VinosSistemaBodega
+    public class VinosSistemaBodega
     {
         private string añada;
         private DateTime fechaActualizacion;
@@ -35,5 +35,10 @@ namespace PPAI.Interfaces
         public List<Maridaje> Maridajes { get => maridajes; set => maridajes = value; }
         public List<TipoUva> TiposUvas { get => tiposUvas; set => tiposUvas = value; }
         public string Nombre { get => nombre; set => nombre = value; }
+        public string Añada { get => añada; set => añada = value; }
+        public string ImagenEtiqueta { get => imagenEtiqueta; set => imagenEtiqueta = value; }
+        public string Nombre1 { get => nombre; set => nombre = value; }
+        public string NotaDeCataBodega { get => notaDeCataBodega; set => notaDeCataBodega = value; }
+        public int PrecioARS { get => precioARS; set => precioARS = value; }
     }
 }

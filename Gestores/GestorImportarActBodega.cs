@@ -34,6 +34,7 @@ namespace PPAI.Gestores
             this.vinosImportados = new List<VinosSistemaBodega>();
             this.vinosListoParaActualizar = new List<VinosSistemaBodega>();
             this.maridajes = new List<Maridaje>();
+            this.enofilosSeguidores = new List<Enofilo>();
             this.pantalla = pantalla;
              
 
@@ -311,23 +312,29 @@ namespace PPAI.Gestores
                 this.maridajes.Add(m4);
                 Maridaje m5 = new Maridaje("Equilibra los sabores de platos agridulces", "Maridaje5");
                 this.maridajes.Add(m5);
-                // todos los enofilos del sistema 
-                /*
-                Enofilo e1 = new Enofilo("Perez", "direccion a donde esta guardada la imagen perfil", "Juan");
-                this.enofilosSeguidores.Add(e1);
-                Enofilo e2 = new Enofilo("Calamaro", "direccion a donde esta guardada la imagen perfil", "Andres");
-                this.enofilosSeguidores.Add(e2);
-                Enofilo e3 = new Enofilo("", "direccion a donde esta guardada la imagen perfil", "Ciro");
-                this.enofilosSeguidores.Add(e3);
-                Enofilo e4 = new Enofilo("Cantillo", "direccion a donde esta guardada la imagen perfil", "Fabiana");
-                this.enofilosSeguidores.Add(e4);
-                Enofilo e5 = new Enofilo("Paez", "direccion a donde esta guardada la imagen perfil", "Fito");
-                this.enofilosSeguidores.Add(e5);
-                Enofilo e6 = new Enofilo("Dargelos", "direccion a donde esta guardada la imagen perfil", "Adrian");
-                this.enofilosSeguidores.Add(e6);
-                //faltan agregar 6 enofilos mas,asi cada una de las cuatro bodegas tiene 3 enofilos seguidores
-                */
-            
+            // todos los enofilos del sistema 
+           
+            // Crear objetos Enofilo con un usuario asignado de la lista de usuarios
+            List<Enofilo> enofilos = new List<Enofilo>();
+            for (int i = 0; i < 10; i++)
+            {
+                string apellido = "Apellido" + (i + 1);
+                string imagenPerfil = "imagen" + (i + 1);
+                string nombreEnofilo = "Enofilo" + (i + 1);
+                for (int j = 0; j < 10; j++)
+                {
+                    string contraseña = "Contraseña" + (j + 1);
+                    string nombreUsuario = "Usuario" + (j + 1);
+                    bool premium = (j % 2 == 0); // true para índices pares, false para índices impares
+                    Usuario usuario = new Usuario(contraseña, nombreUsuario, premium);
+                    Enofilo enofilo = new Enofilo(apellido, imagenPerfil, nombreEnofilo, usuario);
+                    enofilos.Add(enofilo);
+                }
+                
+                
+            }
+
+
         }
         //metodos 
 
@@ -417,45 +424,58 @@ namespace PPAI.Gestores
             }
             this.actualizarFechaActualizacionBodega();
             this.pantalla.mostrarResumenVinosImportados(this.bodegaElegida);
-            this.buscarSeguidoresDeBodega();
+            //this.buscarSeguidoresDeBodega();
         }
 
          
 
         public void actualizarVino(VinosSistemaBodega vinoAActualizar) {
-            //convertir a vinoAActualizar de VinosSistemaBodega a Vino 
-            //this.bodegaElegida.actualizarVino(vinoAActualizar);
+            //convertir de  vinoAActualizar  a Vino
+            Vino v = new Vino(vinoAActualizar.Añada, vinoAActualizar.FechaActualizacion, vinoAActualizar.ImagenEtiqueta, vinoAActualizar.Nombre, vinoAActualizar.NotaDeCataBodega, vinoAActualizar.PrecioARS);
+            this.bodegaElegida.actualizarVino(v);
         }
         public void hayQueCrearVino(VinosSistemaBodega nuevoVino)
         {
-            // nuevoVino no es un Vino sino es json, corregir
-            // si el vino tiene ALGUN maridaje
-
-            List<string> maridajes = new List<string>();
-            // se debe cargar maridajes con los datos del vino JSON
+            //creo Vino segun los datos que vienen del sistema Bodega
+            Vino v = new Vino(nuevoVino.Añada, nuevoVino.FechaActualizacion, nuevoVino.ImagenEtiqueta, nuevoVino.Nombre, nuevoVino.NotaDeCataBodega, nuevoVino.PrecioARS);
             
-            List<Maridaje> maridajesParaNuevoVino =  this.buscarMaridaje(maridajes);
-            
-            // si el vino tiene ALGUN tipo de uva
-            List<string> tiposDeUva = new List<string>();
-            // se debe cargar tiposDeUva con los datos del vino JSON
-            List<TipoUva> tipoUvasParaNuevoVino = this.buscarTipoUva(tiposDeUva);
+            // validar si el vino tiene ALGUN maridaje
+            List<Maridaje> maridajesParaNuevoVino = new List<Maridaje>();
+            if (nuevoVino.Maridajes.Count >0)
+            {
+                 
+                // se debe cargar maridajes con los datos del nuevo vino
+                maridajesParaNuevoVino = this.buscarMaridaje(nuevoVino.Maridajes);
+            }
 
-            this.crearVino(maridajesParaNuevoVino,tipoUvasParaNuevoVino,nuevoVino);
+            //validar  si el vino tiene ALGUN tipo de uva
+            List<TipoUva> tipoUvasParaNuevoVino = new List<TipoUva>();
+            if (nuevoVino.TiposUvas.Count >0)
+            {
+                // se debe cargar tiposDeUva con los datos del del sistema Bodega
+               tipoUvasParaNuevoVino = this.buscarTipoUva(nuevoVino.TiposUvas);
+            }
+            
+
+            this.crearVino(maridajesParaNuevoVino,tipoUvasParaNuevoVino,v);
         }
 
         public void crearVino(List<Maridaje> maridajes,List<TipoUva>tiposUva,Vino vino)
         {
-            throw new NotImplementedException();
+            Vino nuevoVino = new Vino();
+            nuevoVino = vino;
+            nuevoVino.Maridaje = maridajes;
+            nuevoVino.crearVarietal();
+            
         }
 
-        public List<Maridaje> buscarMaridaje(List<string> maridajes) {
+        public List<Maridaje> buscarMaridaje(List<Maridaje> maridajes) {
             List<Maridaje> maridajesUtiles = new List<Maridaje>();
-            foreach (string mNuevoVino in maridajes)
+            foreach (Maridaje mNuevoVino in maridajes)
             {
                 foreach (Maridaje mDelSistema in this.maridajes)
                 {
-                    if (mDelSistema.sosMaridaje(mNuevoVino))
+                    if (mDelSistema.sosMaridaje(mNuevoVino.Nombre))
                     {
                         maridajesUtiles.Add(mDelSistema);
                         
@@ -464,13 +484,13 @@ namespace PPAI.Gestores
             }
             return maridajesUtiles;
         }
-        public List<TipoUva> buscarTipoUva(List<string> tiposDeUva){
+        public List<TipoUva> buscarTipoUva(List<TipoUva> tiposDeUva){
             List<TipoUva> tipoUvaUtil = new List<TipoUva>();    
-            foreach (string tipo in tiposDeUva)
+            foreach (TipoUva tipo in tiposDeUva)
             {
                 foreach (TipoUva tipoUvaSistema in this.tiposUva)
                 {
-                    if (tipoUvaSistema.esElTipoUva(tipo))
+                    if (tipoUvaSistema.esElTipoUva(tipo.Nombre))
                     {
                         tipoUvaUtil.Add(tipoUvaSistema);
                     }
@@ -491,13 +511,13 @@ namespace PPAI.Gestores
                     enofilosANotificar.Add(enofilo.getNombreUsuario());
                 }
             }
-
+            this.interfazNotificacionPush = new InterfazNotificacionPush();
             this.interfazNotificacionPush.notificarNovedadVinoParaBodega(enofilosANotificar);
             this.finCU();
         }             
         public void finCU() {
             MessageBox.Show("Fin CU.");
-            pantalla.Close();
+            //pantalla.Close();
         }
 
     }

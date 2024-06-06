@@ -49,6 +49,11 @@ namespace PPAI
 
                     fila.Cells.Add(nombreBodega);
                     gdrBodegasDisponibles.Rows.Add(fila);
+                    // Establecer el modo de selección en FullRowSelect para seleccionar filas completas
+                    gdrBodegasDisponibles.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+                    // Desactivar la edición de celdas
+                    gdrBodegasDisponibles.ReadOnly = true;
                 }
 
             }
@@ -94,8 +99,8 @@ namespace PPAI
                     DataGridViewCell nombreVino = new DataGridViewTextBoxCell();
                     nombreVino.Value = objeto.getNombre();
 
-                    DataGridViewCell fActualizacionVino = new DataGridViewTextBoxCell();
-                    fActualizacionVino.Value = objeto.FechaActualizacion;
+                    DataGridViewCell FechaActulizacion = new DataGridViewTextBoxCell();
+                    FechaActulizacion.Value = objeto.FechaActualizacion;
 
                     DataGridViewCell añadaVino = new DataGridViewTextBoxCell();
                     añadaVino.Value = objeto.Añada;
@@ -105,11 +110,21 @@ namespace PPAI
 
 
                     fila.Cells.Add(nombreVino);
-                    fila.Cells.Add(precioVino);
+                    fila.Cells.Add(FechaActulizacion);
                     fila.Cells.Add(añadaVino);
-                    fila.Cells.Add(fActualizacionVino);
-                    gdrBodegasDisponibles.Rows.Add(fila);
+                    fila.Cells.Add(precioVino);
+                    
+                    gdrVinosBodega.Rows.Add(fila);
+                    // Establecer el modo de selección en FullRowSelect para seleccionar filas completas
+                    gdrVinosBodega.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+                    // Desactivar la edición de celdas
+                    gdrVinosBodega.ReadOnly = true;
+                    
+                    
                 }
+                gdrBodegasDisponibles.Enabled = false;
+                this.miGestor.buscarSeguidoresDeBodega();
             }
 
         }

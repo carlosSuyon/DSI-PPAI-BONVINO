@@ -29,6 +29,7 @@ namespace PPAI.Entidades
         public List<Varietal> Varietal { get => varietal; set => varietal = value; }
 
         //constructor
+        public Vino() { }
         public Vino(string añada, DateTime fechaActualización, string imagenEtiqueta, string nombre, string notaDeCataBodega, int precioARS)
         {
             this.añada = añada;
@@ -49,7 +50,7 @@ namespace PPAI.Entidades
         }
         //metodos
         public void crearVarietal() { }
-        public Boolean sosEsteVino(string nombreVino) {
+        public Boolean esDeBodega(string nombreVino) {
             
             if ( this.nombre == nombreVino )
             {
@@ -64,7 +65,7 @@ namespace PPAI.Entidades
             }
             return false;
         }
-        public void esDeBodega() { }
+         
         public Boolean esActualizable(){
             return false;   
         }

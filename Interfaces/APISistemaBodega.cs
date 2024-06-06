@@ -62,12 +62,14 @@ namespace PPAI.Interfaces
 
                 // Generar descripciones de maridajes aleatorias
                 List<Maridaje> maridajes = new List<Maridaje>();
-
-                for (int j = 0; j < 2; j++)
+                // Iterar sobre el array de descripciones de maridajes
+                for (int z = 0; z < maridajeDescripciones.Length; z++)
                 {
-                    string descripcionMaridaje = maridajeDescripciones[random.Next(maridajeDescripciones.Length)];
-                    string nombreMaridaje = $"Maridaje{i}_{j + 1}";
-                    maridajes[j] = new Maridaje(descripcionMaridaje, nombreMaridaje);
+                    // Crear una instancia de Maridaje utilizando la descripción del array y un nombre único
+                    Maridaje maridaje = new Maridaje(maridajeDescripciones[z], $"Maridaje{z + 1}");
+
+                    // Agregar la instancia creada a la lista de maridajes
+                    maridajes.Add(maridaje);
                 }
 
                 // Generar datos para el varietal
@@ -98,7 +100,7 @@ namespace PPAI.Interfaces
                 // Agregar vino a la lista
 
                 vinosDeAPI.Add(vino);
-                MessageBox.Show("Se cargo los vinos");
+                
 
             }
             return vinosDeAPI;

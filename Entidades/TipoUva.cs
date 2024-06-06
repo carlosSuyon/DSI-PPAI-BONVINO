@@ -17,6 +17,9 @@ namespace PPAI.Entidades
             this.nombre = nombre;
         }
 
+        public string Nombre { get => nombre; set => nombre = value; }
+        public string Descripcion { get => descripcion; set => descripcion = value; }
+
         public Boolean esElTipoUva(string tipoUvaDelNuevoVino)
         {
             Boolean x = false;

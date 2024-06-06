@@ -1,4 +1,5 @@
 ﻿using PPAI.Entidades;
+using PPAI.Interfaces;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -63,7 +64,7 @@ public class Bodega()
     public Boolean tieneVino(string nombreVino){
         //si el nombreVino del vino importado coincide con el nombre de algun vino de la coleccion de vino de la bodega
         foreach (Vino vinoDeBodega in this.misVinos) {
-           if (vinoDeBodega.sosEsteVino(nombreVino))
+            if (vinoDeBodega.esDeBodega(nombreVino))
             {
                 return true;
             }
