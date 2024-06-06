@@ -17,93 +17,61 @@ namespace PPAI.Interfaces
         {
             //traer los vinos del Sistema de Bodega 
             //fetch o get a un endpoint que me trae una coleccion de vinos segun el nombre de la bodega
-            List<VinosSistemaBodega> vinosDeAPI = new List<VinosSistemaBodega>();
-            Random random = new Random();
-
-            // Lista de variedades de uva tintas y blancas
+            // Datos de ejemplo
             string[] variedadesTintas = { "Merlot", "Syrah", "Cabernet Sauvignon" };
             string[] variedadesBlancas = { "Verdejo", "Godello" };
-
-            // Lista de descripciones de maridajes
             string[] maridajeDescripciones = {
             "Realza las características de los platos",
             "Combina a la perfección con carnes rojas",
             "Ideal para acompañar platos de pescado",
             "Equilibra los sabores de platos agridulces"
-            };
-
-
-
-            // Datos de ejemplo para cargar en los objetos
-            string[] nombres = new string[]
-            {
+        };
+            string[] nombres = {
             "Vino Tinto Reserva", "Vino Blanco Seco", "Vino Rosado", "Vino Tinto Joven", "Vino Espumoso Brut",
             "Vino Tinto Reserva Especial", "Vino Dulce", "Vino Tinto Roble", "Vino Tinto Crianza", "Vino Blanco Semidulce"
-            };
-
-            string[] notasDeCata = new string[]
-            {
+        };
+            string[] notasDeCata = {
             "Frutos rojos intensos, vainilla, suave.", "Notas cítricas, manzana verde, fresco.", "Fresas, florales, ligero y refrescante.",
             "Frutos negros, taninos suaves, fácil de beber.", "Manzana, pera, burbujeante y elegante.", "Frutos maduros, roble, estructurado.",
             "Pasas, miel, untuoso y delicioso.", "Ciruelas, vainilla, suave y equilibrado.", "Frutos rojos, especias, final persistente.",
             "Melocotón, miel, frescura equilibrada."
-            };
+        };
 
-            // Cargar 10 objetos de la clase VinosSistemaBodega
-            for (int i = 1; i <= 10; i++)
+            Random rand = new Random();
+            List<VinosSistemaBodega> vinos = new List<VinosSistemaBodega>();
+
+            for (int i = 0; i < 10; i++)
             {
-                // Generar datos aleatorios para el vino
-                string añada = random.Next(1950, 2025).ToString();
-                DateTime fechaActualizacion = DateTime.Now.AddDays(-random.Next(1, 365));
-                string imagenEtiqueta = "URL de la imagen"; // Puedes proporcionar una URL de imagen o dejarla como un marcador de posición
-                string nombre = nombres[random.Next(nombres.Length)];
-                string notaDeCataBodega = notasDeCata[random.Next(notasDeCata.Length)];
-                int precioARS = random.Next(5000, 100001); // Precio en pesos argentinos
+                string añada = $"20{rand.Next(10, 24)}";
+                DateTime fechaActualizacion = DateTime.Now;
+                string imagenEtiqueta = $"Etiqueta_{i}";
+                string nombre = nombres[i];
+                string notaDeCataBodega = notasDeCata[i];
+                int precioARS = rand.Next(500, 5000);
 
-                // Generar descripciones de maridajes aleatorias
-                List<Maridaje> maridajes = new List<Maridaje>();
-                // Iterar sobre el array de descripciones de maridajes
-                for (int z = 0; z < maridajeDescripciones.Length; z++)
-                {
-                    // Crear una instancia de Maridaje utilizando la descripción del array y un nombre único
-                    Maridaje maridaje = new Maridaje(maridajeDescripciones[z], $"Maridaje{z + 1}");
-
-                    // Agregar la instancia creada a la lista de maridajes
-                    maridajes.Add(maridaje);
-                }
-
-                // Generar datos para el varietal
-                string[] variedades;
-                if (random.Next(2) == 0)
-                {
-                    variedades = variedadesTintas;
-                }
-                else
-                {
-                    variedades = variedadesBlancas;
-                }
-                string nombreUva = variedades[random.Next(variedades.Length)];
-                string descripcionUva = $"Descripción de la uva {nombreUva}";
-
-                // Crear instancia de TipoUva
-                List<TipoUva> tipoUva = new List<TipoUva>();
-                tipoUva.Add(new TipoUva(descripcionUva, nombreUva));
-
-
-                // Crear instancia de VinosSistemaBodega con los datos generados
                 VinosSistemaBodega vino = new VinosSistemaBodega(añada, fechaActualizacion, imagenEtiqueta, nombre, notaDeCataBodega, precioARS);
-                vino.Maridajes = maridajes;
-                vino.TiposUvas = tipoUva;
-                // Establecer fechaActualizacion
-                vino.FechaActualizacion = fechaActualizacion;
 
-                // Agregar vino a la lista
+                // Añadir 2 maridajes
+                for (int j = 0; j < 2; j++)
+                {
+                    string maridajeDescripcion = maridajeDescripciones[rand.Next(maridajeDescripciones.Length)];
+                    vino.Maridajes.Add(new Maridaje(maridajeDescripcion, $"Maridaje_{j + 1}"));
+                }
 
-                vinosDeAPI.Add(vino);
-                
+                // Añadir entre 0 y 5 varietales
+                int numVarietales = rand.Next(0, 6);
+                for (int j = 0; j < numVarietales; j++)
+                {
+                    bool esTinta = rand.Next(2) == 0;
+                    string varietalNombre = esTinta ? variedadesTintas[rand.Next(variedadesTintas.Length)] : variedadesBlancas[rand.Next(variedadesBlancas.Length)];
+                    TipoUva tipoUva = new TipoUva($"Descripción de {varietalNombre}", varietalNombre);
+                    Varietal varietal = new Varietal(varietalNombre, $"Descripción Varietal {varietalNombre}", rand.Next(0, 100), tipoUva);
+                    vino.Varietales.Add(varietal);
+                }
+                vinos.Add(vino);
 
             }
-            return vinosDeAPI;
+            return vinos;
         }
     }
 }

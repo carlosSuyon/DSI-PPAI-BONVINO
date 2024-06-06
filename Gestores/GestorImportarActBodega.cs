@@ -107,7 +107,7 @@ namespace PPAI.Gestores
                 TipoUva tipoUva = new TipoUva(descripcionUva, nombreUva);
 
                 // Crear instancia de Varietal
-                Varietal varietal = new Varietal(nombreVarietal, descripcionVarietal, porcentajeComposicion, tipoUva);
+                Varietal varietal = new Varietal(nombreVarietal, descripcionVarietal+":" +nombreUva, porcentajeComposicion, tipoUva);
 
                 // Crear instancia de Vino con los datos generados
                 string nombreVino = nombresVinosPopulares[random.Next(nombresVinosPopulares.Length)];
@@ -143,8 +143,8 @@ namespace PPAI.Gestores
                 // Generar descripción de maridajes aleatorias
                 string descripcionMaridaje1 = maridajeDescripciones[random.Next(maridajeDescripciones.Length)];
                 string descripcionMaridaje2 = maridajeDescripciones[random.Next(maridajeDescripciones.Length)];
-                string nombreMaridaje1 = $"Maridaje{i}_1";
-                string nombreMaridaje2 = $"Maridaje{i}_2";
+                string nombreMaridaje1 = $"Maridaje{i}";
+                string nombreMaridaje2 = $"Maridaje{i+1}";
                 Maridaje maridaje1 = new Maridaje(descripcionMaridaje1, nombreMaridaje1);
                 Maridaje maridaje2 = new Maridaje(descripcionMaridaje2, nombreMaridaje2);
 
@@ -208,15 +208,13 @@ namespace PPAI.Gestores
                 // Generar descripción de maridajes aleatorias
                 string descripcionMaridaje1 = maridajeDescripciones[random.Next(maridajeDescripciones.Length)];
                 string descripcionMaridaje2 = maridajeDescripciones[random.Next(maridajeDescripciones.Length)];
-                string nombreMaridaje1 = $"Maridaje{i}_1";
-                string nombreMaridaje2 = $"Maridaje{i}_2";
+                string nombreMaridaje1 = $"Maridaje{i}";
+                string nombreMaridaje2 = $"Maridaje{i+1}";
                 Maridaje maridaje1 = new Maridaje(descripcionMaridaje1, nombreMaridaje1);
                 Maridaje maridaje2 = new Maridaje(descripcionMaridaje2, nombreMaridaje2);
 
                 // Generar datos para el varietal
-                string nombreVarietal = $"Varietal{i}";
-                string descripcionVarietal = $"Vino varietal con predominancia de una variedad de uva";
-                int porcentajeComposicion = random.Next(80, 101); // Entre 80% y 100%
+                
 
                 // Elegir una variedad de uva al azar
                 string[] variedades;
@@ -233,7 +231,9 @@ namespace PPAI.Gestores
 
                 // Crear instancia de TipoUva
                 TipoUva tipoUva = new TipoUva(descripcionUva, nombreUva);
-
+                string nombreVarietal = $"Varietal{i}";
+                string descripcionVarietal = $"Vino varietal con predominancia de una variedad de uva" + nombreUva;
+                int porcentajeComposicion = random.Next(80, 101); // Entre 80% y 100%
                 // Crear instancia de Varietal
                 Varietal varietal = new Varietal(nombreVarietal, descripcionVarietal, porcentajeComposicion, tipoUva);
 
@@ -260,7 +260,8 @@ namespace PPAI.Gestores
             DateTime fechaUltimaActualizacion4 = new DateTime(a4, mes4, d4);
             Bodega bodega4 = new Bodega("Bodega4", "descripcion4", fechaUltimaActualizacion4, 6, "historia de la bodega 1");
             // Vinos para bodega4
-            for (int i = 1; i <= 15; i++)
+            
+            for (int i = 1; i <= 10; i++)
             {
                 // Generar datos para el vino
                 int yearAñada = random.Next(1950, 2025);
@@ -270,19 +271,51 @@ namespace PPAI.Gestores
                 DateTime fechaAleatoria = new DateTime(yearFecha, month, day);
                 int precioAleatorio = random.Next(5000, 100001);
 
+                // Generar descripción de maridajes aleatorias
                 string descripcionMaridaje1 = maridajeDescripciones[random.Next(maridajeDescripciones.Length)];
                 string descripcionMaridaje2 = maridajeDescripciones[random.Next(maridajeDescripciones.Length)];
+                string nombreMaridaje1 = $"Maridaje{i}";
+                string nombreMaridaje2 = $"Maridaje{i + 1}";
+                Maridaje maridaje1 = new Maridaje(descripcionMaridaje1, nombreMaridaje1);
+                Maridaje maridaje2 = new Maridaje(descripcionMaridaje2, nombreMaridaje2);
 
-                string nombreVino = nombresVinosPopulares[random.Next(nombresVinosPopulares.Length)];
+                // Generar datos para el varietal
+                // Elegir una variedad de uva al azar
+                string[] variedades;
+                if (random.Next(2) == 0)
+                {
+                    variedades = variedadesTintas;
+                }
+                else
+                {
+                    variedades = variedadesBlancas;
+                }
+                string nombreUva = variedades[random.Next(variedades.Length)];
+                string descripcionUva = $"Descripción de la uva {nombreUva}";
+
+                // Crear instancia de TipoUva
+                TipoUva tipoUva = new TipoUva(descripcionUva, nombreUva);
+                string nombreVarietal = $"Varietal{i}";
+                string descripcionVarietal = $"Vino varietal con predominancia de una variedad de uva"+ nombreUva;
+                int porcentajeComposicion = random.Next(80, 101); // Entre 80% y 100%
+
+                
+
+                // Crear instancia de Varietal
+                Varietal varietal = new Varietal(nombreVarietal, descripcionVarietal, porcentajeComposicion, tipoUva);
 
                 // Crear instancia de Vino con los datos generados
+                string nombreVino = nombresVinosPopulares[random.Next(nombresVinosPopulares.Length)];
                 Vino vino = new Vino(yearAñada.ToString(), fechaAleatoria, "https://picsum.photos/200/", nombreVino, $"{descripcionMaridaje1}, {descripcionMaridaje2}", precioAleatorio);
+                vino.Varietal.Add(varietal);
+                vino.Maridaje.Add(maridaje1);
+                vino.Maridaje.Add(maridaje2);
 
                 // Establecer fechaActualizacion
                 vino.FechaActualizacion = fechaAleatoria;
 
-                // Agregar vino a bodega4
-                bodega4.MisVinos.Add(vino);
+                // Agregar vino a bodega3
+                bodega3.MisVinos.Add(vino);
             }
 
 
@@ -450,10 +483,10 @@ namespace PPAI.Gestores
 
             //validar  si el vino tiene ALGUN tipo de uva
             List<TipoUva> tipoUvasParaNuevoVino = new List<TipoUva>();
-            if (nuevoVino.TiposUvas.Count >0)
+            if (nuevoVino.Varietales.Count >0)
             {
                 // se debe cargar tiposDeUva con los datos del del sistema Bodega
-               tipoUvasParaNuevoVino = this.buscarTipoUva(nuevoVino.TiposUvas);
+               //tipoUvasParaNuevoVino = this.buscarTipoUva(nuevoVino.Varietales);
             }
             
 

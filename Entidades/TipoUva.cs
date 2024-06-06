@@ -16,7 +16,7 @@ namespace PPAI.Entidades
             this.descripcion = descripcion;
             this.nombre = nombre;
         }
-
+        public TipoUva() { }
         public string Nombre { get => nombre; set => nombre = value; }
         public string Descripcion { get => descripcion; set => descripcion = value; }
 
