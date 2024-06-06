@@ -9,7 +9,7 @@ namespace PPAI
 
         private void label1_Click(object sender, EventArgs e)
         {
-
+            //
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -17,10 +17,10 @@ namespace PPAI
             MessageBox.Show("En la proxima entrega (?");
         }
 
-        
+
         private void btnIAVB_Click(object sender, EventArgs e)
         {
-            this.importarActVinosBodega(sender,e);
+            this.importarActVinosBodega(sender, e);
         }
 
         // importarActVinosBodega()
@@ -35,6 +35,11 @@ namespace PPAI
         private void btnRegistrarBodega_Click(object sender, EventArgs e)
         {
             MessageBox.Show("En la proxima entrega (?");
+        }
+
+        private void FormAdmBonvino_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

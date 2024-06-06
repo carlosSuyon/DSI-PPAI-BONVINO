@@ -8,19 +8,19 @@ public class Bodega()
     private string nombre;
     private string descripcion;
     private DateTime  fechaUltimaActualizacion;
-    private string  periodoActualizacion;
+    private int  periodoActualizacion;
     private string  historia;
     private List<Vino> misVinos;
 
     public string Nombre { get => nombre; set => nombre = value; }
     public string Descripcion { get => descripcion; set => descripcion = value; }
     public DateTime FechaUltimaActualizacion { get => fechaUltimaActualizacion; set => fechaUltimaActualizacion = value; }
-    public string PeriodoActualizacion { get => periodoActualizacion; set => periodoActualizacion = value; }
+    public int PeriodoActualizacion { get => periodoActualizacion; set => periodoActualizacion = value; }
     public string Historia { get => historia; set => historia = value; }
     public List<Vino> MisVinos { get => misVinos; set => misVinos = value; }
 
     //constructor
-    public Bodega(string nombre, string descripcion,DateTime fechaUltimaActualizacion ,string periodoActualizacion, string historia) : this()
+    public Bodega(string nombre, string descripcion,DateTime fechaUltimaActualizacion ,int periodoActualizacion, string historia) : this()
     {
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -59,10 +59,10 @@ public class Bodega()
              }
         }
     }
-    public Boolean tieneVino(Vino unVino){
+    public Boolean tieneVino(string nombreVino){
         foreach (Vino vinoBodega in this.misVinos) {
-            return (vinoBodega.sosEsteVino(unVino));
-
+            return (vinoBodega.sosEsteVino(nombreVino));
+            
         }
         return false;   
     }
@@ -84,5 +84,9 @@ public class Bodega()
     public string getNombre()
     {
         return this.nombre;
+    }
+    public void setFechaUltimaActualizacion(DateTime fecha)
+    {
+        this.FechaUltimaActualizacion=fecha;
     }
 }

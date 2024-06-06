@@ -25,6 +25,7 @@ namespace PPAI.Entidades
         public string Nombre { get => nombre; set => nombre = value; }
         public string NotaDeCataBodega { get => notaDeCataBodega; set => notaDeCataBodega = value; }
         public int PrecioARS { get => precioARS; set => precioARS = value; }
+        public List<Maridaje> Maridaje { get => maridaje; set => maridaje = value; }
 
         //constructor
         public Vino(string añada, DateTime fechaActualización, string imagenEtiqueta, string nombre, string notaDeCataBodega, int precioARS)
@@ -36,13 +37,20 @@ namespace PPAI.Entidades
             this.notaDeCataBodega = notaDeCataBodega;
             this.precioARS = precioARS;
 
+
+
             //faltan pasar el maridaje y el varietal 
+            this.maridaje = new List<Maridaje>();
+            
+            this.varietal = new List<Varietal>();
+            this.crearVarietal();
+
         }
         //metodos
         public void crearVarietal() { }
-        public Boolean sosEsteVino(Vino vino) {
+        public Boolean sosEsteVino(string nombreVino) {
             
-            if (vino.nombre == this.nombre )
+            if ( this.nombre == nombreVino )
             {
                 return true;
             }

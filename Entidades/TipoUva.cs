@@ -17,10 +17,13 @@ namespace PPAI.Entidades
             this.nombre = nombre;
         }
 
-        public Boolean esElTipoUva()
+        public Boolean esElTipoUva(string tipoUvaDelNuevoVino)
         {
             Boolean x = false;
-            //logica
+            if (this.nombre == tipoUvaDelNuevoVino)
+            {
+                   return true;
+            }
             return x;
         }
     }

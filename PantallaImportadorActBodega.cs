@@ -13,41 +13,44 @@ namespace PPAI
 {
     public partial class PantallaImportadorActBodega : Form
     {
-        
+
         private GestorImportarActBodega miGestor = new GestorImportarActBodega();
         public PantallaImportadorActBodega()
         {
             InitializeComponent();
+            //instacia un gestor 
             this.miGestor = new GestorImportarActBodega(this);
+
+        }
+
+
+        public void habilitarPantalla()
+        {
+            this.Show();
             this.miGestor.importarActVinosBodega();
         }
 
-        private void PantallaImportadorActBodega_Load(object sender, EventArgs e)
-        {
-
-        }
-
         public void mostrarBodegas(List<Bodega> bodegas)
-        {            
+        {
             if (bodegas.Count == 0)
             {
                 MessageBox.Show("No hay bodegas con actualizaciones disponibles.");
             }
             else
             {
-             
+
                 foreach (var objeto in bodegas)
                 {
-                   
+
                     DataGridViewRow fila = new DataGridViewRow();
 
                     DataGridViewCell nombreBodega = new DataGridViewTextBoxCell();
                     nombreBodega.Value = objeto.getNombre();
-                    
+
                     fila.Cells.Add(nombreBodega);
                     gdrBodegasDisponibles.Rows.Add(fila);
                 }
-                
+
             }
             // alert para que el adm de bomvino eliga una bodega (click en fila de grilla)
             this.solicitarSeleccionBodega();
@@ -55,14 +58,13 @@ namespace PPAI
 
         public void solicitarSeleccionBodega()
         {
-            
+
             MessageBox.Show("Para seleccionar una bodega haga click sobre su nombre");
         }
-        public void tomarSelecciónBodega(string bodegaSeleccionada) {
+        public void tomarSelecciónBodega(string bodegaSeleccionada)
+        {
             this.miGestor.tomarSelecciónBodega(bodegaSeleccionada);
         }
-        public void mostrarResumenVinosImportados() { }
-
         private void bodegasDisponibles_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             //
@@ -71,8 +73,48 @@ namespace PPAI
 
             MessageBox.Show("Se selecciono la bodega: " + bodegaSeleccionada);
             tomarSelecciónBodega(bodegaSeleccionada);
-           
+
         }
+
+        public void mostrarResumenVinosImportados(Bodega bSeleccionada)
+        {
+            gdrVinosBodega.Visible = true;
+            label3.Visible  = true;
+            if (bSeleccionada.MisVinos.Count == 0)
+            {
+                MessageBox.Show("No hay resumen para la bodega" + bSeleccionada.Nombre);
+            }
+            else
+            {
+                foreach (var objeto in bSeleccionada.MisVinos)
+                {
+
+                    DataGridViewRow fila = new DataGridViewRow();
+
+                    DataGridViewCell nombreVino = new DataGridViewTextBoxCell();
+                    nombreVino.Value = objeto.getNombre();
+
+                    DataGridViewCell fActualizacionVino = new DataGridViewTextBoxCell();
+                    fActualizacionVino.Value = objeto.FechaActualizacion;
+
+                    DataGridViewCell añadaVino = new DataGridViewTextBoxCell();
+                    añadaVino.Value = objeto.Añada;
+
+                    DataGridViewCell precioVino = new DataGridViewTextBoxCell();
+                    precioVino.Value = objeto.PrecioARS;
+
+
+                    fila.Cells.Add(nombreVino);
+                    fila.Cells.Add(precioVino);
+                    fila.Cells.Add(añadaVino);
+                    fila.Cells.Add(fActualizacionVino);
+                    gdrBodegasDisponibles.Rows.Add(fila);
+                }
+            }
+
+        }
+
+
 
         private void label2_Click(object sender, EventArgs e)
         {
@@ -83,9 +125,14 @@ namespace PPAI
         {
 
         }
+        private void PantallaImportadorActBodega_Load(object sender, EventArgs e)
+        {
 
-        public void habilitarPantalla(){
-            this.Show();
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -36,7 +36,7 @@
             // 
             // btnIAVB
             // 
-            btnIAVB.Location = new Point(205, 103);
+            btnIAVB.Location = new Point(230, 101);
             btnIAVB.Name = "btnIAVB";
             btnIAVB.Size = new Size(332, 54);
             btnIAVB.TabIndex = 0;
@@ -46,7 +46,7 @@
             // 
             // label1
             // 
-            label1.Location = new Point(205, 27);
+            label1.Location = new Point(230, 29);
             label1.Name = "label1";
             label1.Size = new Size(332, 39);
             label1.TabIndex = 1;
@@ -55,7 +55,7 @@
             // 
             // btnRegistrarVarietal
             // 
-            btnRegistrarVarietal.Location = new Point(205, 180);
+            btnRegistrarVarietal.Location = new Point(230, 181);
             btnRegistrarVarietal.Name = "btnRegistrarVarietal";
             btnRegistrarVarietal.Size = new Size(332, 54);
             btnRegistrarVarietal.TabIndex = 2;
@@ -65,7 +65,7 @@
             // 
             // btnRegistrarBodega
             // 
-            btnRegistrarBodega.Location = new Point(205, 266);
+            btnRegistrarBodega.Location = new Point(230, 266);
             btnRegistrarBodega.Name = "btnRegistrarBodega";
             btnRegistrarBodega.Size = new Size(332, 54);
             btnRegistrarBodega.TabIndex = 3;
@@ -84,6 +84,7 @@
             Controls.Add(btnIAVB);
             Name = "FormAdmBonvino";
             Text = "AdmBonvino";
+            Load += FormAdmBonvino_Load;
             ResumeLayout(false);
         }
 

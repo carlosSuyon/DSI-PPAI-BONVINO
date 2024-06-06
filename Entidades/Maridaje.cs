@@ -18,11 +18,13 @@ namespace PPAI.Entidades
         public string Descripcion { get => descripcion; set => descripcion = value; }
         public string Nombre { get => nombre; set => nombre = value; }
 
-        public Boolean sosMaridaje()
+        public Boolean sosMaridaje(string maridaje)
         {
-            Boolean x = false;
-            //logica
-            return x;
+            if (this.nombre == maridaje)
+            {
+                return true;    
+            }
+            return false;
         }
     }
 }
