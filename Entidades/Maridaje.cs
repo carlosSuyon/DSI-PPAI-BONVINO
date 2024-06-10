@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PPAI.Entidades
+﻿namespace PPAI.Entidades
 {
     public class Maridaje
     {
@@ -18,7 +12,7 @@ namespace PPAI.Entidades
         public string Descripcion { get => descripcion; set => descripcion = value; }
         public string Nombre { get => nombre; set => nombre = value; }
 
-        public Boolean sosMaridaje(string maridaje)
+        public Boolean esElMaridaje(string maridaje)
         {
             if (this.nombre == maridaje)
             {

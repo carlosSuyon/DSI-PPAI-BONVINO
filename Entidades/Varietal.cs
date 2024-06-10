@@ -13,7 +13,7 @@ namespace PPAI.Entidades
         private int porcentajeComposicion;
 
         private TipoUva tipoUva;
-        public Varietal(string nombre, string descripcion, int porcentajeComposicion, TipoUva tipoUva)
+        public  Varietal(string nombre, string descripcion, int porcentajeComposicion, TipoUva tipoUva)
         {
             this.nombre = nombre;
             this.descripcion = descripcion;

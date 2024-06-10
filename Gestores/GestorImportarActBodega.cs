@@ -7,6 +7,7 @@ using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using PPAI.Entidades;
 using PPAI.Interfaces;
+using static System.Net.WebRequestMethods;
 
 namespace PPAI.Gestores
 {
@@ -14,14 +15,20 @@ namespace PPAI.Gestores
     {
         //atributos
         private PantallaImportadorActBodega pantalla;
+
         private Bodega bodegaElegida;
         private List<Bodega> bodegas;
+
         private List<Enofilo> enofilosSeguidores;
         private List<string> enofilosANotificar;
+
         private List<VinosSistemaBodega> vinosImportados;
-        private List<VinosSistemaBodega> vinosListoParaActualizar;
+        private List<VinosSistemaBodega> vinosParaActualizar;
+
         private List<Maridaje> maridajes;
         private List<TipoUva> tiposUva;
+
+        //private List<Vino> vinosDelSistema;
 
         private APISistemaBodega APISistemaBodega;
         private InterfazNotificacionPush interfazNotificacionPush;
@@ -32,11 +39,11 @@ namespace PPAI.Gestores
             this.bodegas = new List<Bodega>();  
             this.tiposUva = new List<TipoUva>(); 
             this.vinosImportados = new List<VinosSistemaBodega>();
-            this.vinosListoParaActualizar = new List<VinosSistemaBodega>();
+            this.vinosParaActualizar = new List<VinosSistemaBodega>();
             this.maridajes = new List<Maridaje>();
             this.enofilosSeguidores = new List<Enofilo>();
             this.pantalla = pantalla;
-             
+            //this.vinosDelSistema = new List<Vino>();    
 
             this.load();
         }
@@ -44,333 +51,243 @@ namespace PPAI.Gestores
         {
             //Esta clase se utiliza para generar números aleatorios en C#.
             Random random = new Random();
-            // Definición de nombres de vinos populares
-            string[] nombresVinosPopulares = new string[]
+            List<Vino> vinosDelSistema = new List<Vino>();
+            string[] variedadesTintas = new string[]
             {
-            "Malbec Reserva", "Chardonnay Gran Reserva", "Cabernet Sauvignon", "Merlot Clásico", "Sauvignon Blanc Premium",
-            "Syrah Vendimia Seleccionada", "Pinot Noir Joven", "Tannat Roble", "Rosé Brut Nature", "Torrontés Dulce"
+                "Merlot",
+                "Syrah",
+                "Cabernet Sauvignon",
+                "Pinot Noir",
+                "Malbec",
+                "Tempranillo",
+                "Zinfandel",
+                "Grenache",
+                "Nebbiolo",
+                "Sangiovese",
+                "Barbera",
             };
-            // maridajes randoms
-            string[] maridajeDescripciones = {
+            string[] variedadesBlancas = new string[]
+            {
+                "Verdejo",
+                "Godello",
+                "Chardonnay",
+                "Sauvignon Blanc",
+                "Riesling",
+                "Pinot Grigio",
+                "Chenin Blanc",
+                "Gewürztraminer",
+                "Viognier",
+                "Albariño"
+            };
+            string[] maridajeDescripciones = new string[]
+            {
                 "Realza las características de los platos",
                 "Combina a la perfección con carnes rojas",
                 "Ideal para acompañar platos de pescado",
-                "Equilibra los sabores de platos agridulces"
+                "Equilibra los sabores de platos agridulces",
+                "Perfecto para maridar con quesos fuertes",
+                "Excelente con pastas en salsas cremosas",
+                "Complementa bien con ensaladas frescas",
+                "Realza los sabores de platos picantes",
+                "Marida perfectamente con mariscos",
+                "Ideal para acompañar aves de corral",
+                "Combina bien con platos vegetarianos",
+                "Equilibra los sabores de platos grasos",
+                "Perfecto para acompañar sushi",
+                "Excelente con postres de chocolate",
+                "Marida bien con platos de cerdo",
+                "Ideal para acompañar tapas y aperitivos",
+                "Realza los sabores de comidas mediterráneas",
+                "Combina bien con platos ahumados",
+                "Perfecto para acompañar guisos y estofados",
+                "Marida bien con pizzas y platos italianos"
             };
-            // Lista de variedades de uva tintas y blancas
-            string[] variedadesTintas = { "Merlot", "Syrah", "Cabernet Sauvignon" };
-            string[] variedadesBlancas = { "Verdejo", "Godello" };
-            //bodegas del sistema - mock-
-
-            //bodega1
-            // fechaUltimaActualizacion random
-            int año = random.Next(2023, 2025);
-            int mes = random.Next(1, 13);
-            int dia = random.Next(1, DateTime.DaysInMonth(año, mes));
-            DateTime fechaUltimaActualizacion = new DateTime(año, mes, dia);
-            Bodega bodega1 = new Bodega("Bodega1", "descripcion1", fechaUltimaActualizacion, 2, "historia de la bodega 1");
-            // Vinos para bodega1
-            for (int i = 1; i <= 8; i++)
+            string[] nombres =
             {
-                // Generar datos para el vino
-                int yearAñada = random.Next(1950, 2025);
-                int yearFecha = random.Next(2020, 2025);
-                int month = random.Next(1, 13);
-                int day = random.Next(1, DateTime.DaysInMonth(yearFecha, month));
-                DateTime fechaAleatoria = new DateTime(yearFecha, month, day);
-                int precioAleatorio = random.Next(5000, 100001);
-
-                // Generar descripción de maridaje aleatoria
-                string descripcionMaridaje = maridajeDescripciones[random.Next(maridajeDescripciones.Length)];
-                string nombreMaridaje = $"Maridaje{i}";
-                Maridaje maridaje = new Maridaje(descripcionMaridaje, nombreMaridaje);
-
-                // Generar datos para el varietal
-                string nombreVarietal = $"Varietal{i}";
-                string descripcionVarietal = $"Vino varietal con predominancia de una variedad de uva";
-                int porcentajeComposicion = random.Next(80, 101); // Entre 80% y 100%
-
-                // Elegir una variedad de uva al azar
-                string[] variedades;
-                if (random.Next(2) == 0)
-                {
-                    variedades = variedadesTintas;
-                }
-                else
-                {
-                    variedades = variedadesBlancas;
-                }
-                string nombreUva = variedades[random.Next(variedades.Length)];
-                string descripcionUva = $"Descripción de la uva {nombreUva}";
-
-                // Crear instancia de TipoUva
-                TipoUva tipoUva = new TipoUva(descripcionUva, nombreUva);
-
-                // Crear instancia de Varietal
-                Varietal varietal = new Varietal(nombreVarietal, descripcionVarietal+":" +nombreUva, porcentajeComposicion, tipoUva);
-
-                // Crear instancia de Vino con los datos generados
-                string nombreVino = nombresVinosPopulares[random.Next(nombresVinosPopulares.Length)];
-                Vino vino = new Vino(yearAñada.ToString(), fechaAleatoria, "https://picsum.photos/200/",nombreVino, descripcionMaridaje, precioAleatorio);
-                vino.Maridaje.Add(maridaje);
-                vino.Varietal.Add(varietal);
-                // Establecer fechaActualizacion
-                vino.FechaActualizacion = fechaAleatoria;
-
-                // Agregar vino a bodega1
-                bodega1.MisVinos.Add(vino);
-            }
-            this.bodegas.Add(bodega1);
-
-            //bodega2
-            // fechaUltimaActualizacion random
-            int añob2 = random.Next(2023, 2025);
-            int mesb2 = random.Next(1, 13);
-            int diab2 = random.Next(1, DateTime.DaysInMonth(añob2, mesb2));
-            DateTime fechaUltimaActualizacion2 = new DateTime(añob2, mesb2, diab2);
-            Bodega bodega2 = new Bodega("Bodega2", "descripcion2", fechaUltimaActualizacion2, 1, "historia de la bodega 1");
-            // Vinos para bodega2
-            for (int i = 1; i <= 3; i++)
+              "Juan", "Carlos", "Martín", "Pedro", "Lucas",
+                "Javier", "Miguel", "Diego", "Gonzalo", "Agustín",
+                "María", "Laura", "Ana", "Sofía", "Valentina",
+                "Elena", "Camila", "Julieta", "Abril", "Florencia"
+            };
+            // Definición de nombres de vinos populares y bodegas
+            string[] nombresVinosPopulares = new string[]
             {
-                // Generar datos para el vino
-                int yearAñada = random.Next(1950, 2025);
-                int yearFecha = random.Next(2020, 2025);
-                int month = random.Next(1, 13);
-                int day = random.Next(1, DateTime.DaysInMonth(yearFecha, month));
-                DateTime fechaAleatoria = new DateTime(yearFecha, month, day);
-                int precioAleatorio = random.Next(5000, 100001);
+                "Malbec Reserva",
+                "Chardonnay Gran Reserva",
+                "Cabernet Sauvignon",
+                "Merlot Clásico",
+                "Sauvignon Blanc Premium",
+                "Syrah Vendimia Seleccionada",
+                "Pinot Noir Joven",
+                "Tannat Roble",
+                "Rosé Brut Nature",
+                "Torrontés Dulce",
+                "Riesling Seco",
+                "Tempranillo Crianza",
+                "Zinfandel Old Vine",
+                "Grenache Blanc",
+                "Viognier Prestige",
+                "Petite Sirah Reserva",
+                "Carmenere Especial",
+                "Garnacha Joven",
+                "Verdejo Superior",
+                "Barbera d'Asti",
+                "Nebbiolo Langhe",
+                "Sangiovese Classico",
+                "Albariño Rías Baixas",
+                "Grüner Veltliner",
+                "Cava Brut Reserva",
+                "Champagne Brut Rosé",
+                "Prosecco Superiore",
+                "Moscato d'Asti",
+                "Chianti Riserva",
+                "Pinot Grigio delle Venezie"
+            };
 
-                // Generar descripción de maridajes aleatorias
-                string descripcionMaridaje1 = maridajeDescripciones[random.Next(maridajeDescripciones.Length)];
-                string descripcionMaridaje2 = maridajeDescripciones[random.Next(maridajeDescripciones.Length)];
-                string nombreMaridaje1 = $"Maridaje{i}";
-                string nombreMaridaje2 = $"Maridaje{i+1}";
-                Maridaje maridaje1 = new Maridaje(descripcionMaridaje1, nombreMaridaje1);
-                Maridaje maridaje2 = new Maridaje(descripcionMaridaje2, nombreMaridaje2);
 
-                // Generar datos para el varietal
-                string nombreVarietal = $"Varietal{i}";
-                string descripcionVarietal = $"Vino varietal con predominancia de una variedad de uva";
-                int porcentajeComposicion = random.Next(80, 101); // Entre 80% y 100%
+            // Tipos de Uva del sistema
 
-                // Elegir una variedad de uva al azar
-                string[] variedades;
-                if (random.Next(2) == 0)
-                {
-                    variedades = variedadesTintas;
-                }
-                else
-                {
-                    variedades = variedadesBlancas;
-                }
-                string nombreUva = variedades[random.Next(variedades.Length)];
-                string descripcionUva = $"Descripción de la uva {nombreUva}";
-
-                // Crear instancia de TipoUva
-                TipoUva tipoUva = new TipoUva(descripcionUva, nombreUva);
-
-                // Crear instancia de Varietal
-                Varietal varietal = new Varietal(nombreVarietal, descripcionVarietal, porcentajeComposicion, tipoUva);
-
-                // Crear instancia de Vino con los datos generados
-                string nombreVino = nombresVinosPopulares[random.Next(nombresVinosPopulares.Length)];
-                Vino vino = new Vino(yearAñada.ToString(), fechaAleatoria, "https://picsum.photos/200/", nombreVino, $"{descripcionMaridaje1}, {descripcionMaridaje2}", precioAleatorio);
-                vino.Varietal.Add(varietal);
-                vino.Maridaje.Add(maridaje1);
-                vino.Maridaje.Add(maridaje2);
-
-                // Establecer fechaActualizacion
-                vino.FechaActualizacion = fechaAleatoria;
-
-                // Agregar vino a bodega2
-                bodega2.MisVinos.Add(vino);
-            }
-            this.bodegas.Add(bodega2);
-
-            //Bodega3
-            // fechaUltimaActualizacion random
-            int añob3 = random.Next(2024, 2025);
-            int mesb3 = random.Next(1, 6);
-            int diab3 = random.Next(1, DateTime.DaysInMonth(añob3, mesb3));
-            DateTime fechaUltimaActualizacion3 = new DateTime(añob3, mesb3, diab3);
-            Bodega bodega3 = new Bodega("Bodega3", "descripcion3",fechaUltimaActualizacion3, 1, "historia de la bodega 1");
-            // Vinos para bodega3
-            for (int i = 1; i <= 10; i++)
+            for (int i = 0; i < variedadesTintas.Length; i++)
             {
-                // Generar datos para el vino
-                int yearAñada = random.Next(1950, 2025);
-                int yearFecha = random.Next(2020, 2025);
-                int month = random.Next(1, 13);
-                int day = random.Next(1, DateTime.DaysInMonth(yearFecha, month));
-                DateTime fechaAleatoria = new DateTime(yearFecha, month, day);
-                int precioAleatorio = random.Next(5000, 100001);
-
-                // Generar descripción de maridajes aleatorias
-                string descripcionMaridaje1 = maridajeDescripciones[random.Next(maridajeDescripciones.Length)];
-                string descripcionMaridaje2 = maridajeDescripciones[random.Next(maridajeDescripciones.Length)];
-                string nombreMaridaje1 = $"Maridaje{i}";
-                string nombreMaridaje2 = $"Maridaje{i+1}";
-                Maridaje maridaje1 = new Maridaje(descripcionMaridaje1, nombreMaridaje1);
-                Maridaje maridaje2 = new Maridaje(descripcionMaridaje2, nombreMaridaje2);
-
-                // Generar datos para el varietal
-                
-
-                // Elegir una variedad de uva al azar
-                string[] variedades;
-                if (random.Next(2) == 0)
-                {
-                    variedades = variedadesTintas;
-                }
-                else
-                {
-                    variedades = variedadesBlancas;
-                }
-                string nombreUva = variedades[random.Next(variedades.Length)];
-                string descripcionUva = $"Descripción de la uva {nombreUva}";
-
-                // Crear instancia de TipoUva
-                TipoUva tipoUva = new TipoUva(descripcionUva, nombreUva);
-                string nombreVarietal = $"Varietal{i}";
-                string descripcionVarietal = $"Vino varietal con predominancia de una variedad de uva" + nombreUva;
-                int porcentajeComposicion = random.Next(80, 101); // Entre 80% y 100%
-                // Crear instancia de Varietal
-                Varietal varietal = new Varietal(nombreVarietal, descripcionVarietal, porcentajeComposicion, tipoUva);
-
-                // Crear instancia de Vino con los datos generados
-                string nombreVino = nombresVinosPopulares[random.Next(nombresVinosPopulares.Length)];
-                Vino vino = new Vino(yearAñada.ToString(), fechaAleatoria, "https://picsum.photos/200/",nombreVino, $"{descripcionMaridaje1}, {descripcionMaridaje2}", precioAleatorio);
-                vino.Varietal.Add(varietal);
-                vino.Maridaje.Add(maridaje1);
-                vino.Maridaje.Add(maridaje2);
-
-                // Establecer fechaActualizacion
-                vino.FechaActualizacion = fechaAleatoria;
-
-                // Agregar vino a bodega3
-                bodega3.MisVinos.Add(vino);
+                string nombre = variedadesTintas[i];
+                string descripcion = "Descripcion uva(Tinta) :" + nombre;
+                TipoUva tip = new TipoUva(descripcion, nombre);
+                this.tiposUva.Add(tip);
             }
-            this.bodegas.Add(bodega3);
+            for (int i = 0; i < variedadesBlancas.Length; i++)
+            {
+                string nombre = variedadesBlancas[i];
+                string descripcion = "Descripción uva(Blanca): " + nombre;
+                TipoUva tip = new TipoUva(descripcion, nombre);
+                this.tiposUva.Add(tip);
+            }
 
-            //Bodega4 
-            // fechaUltimaActualizacion random
-            int a4 = random.Next(2024, 2025);
-            int mes4 = random.Next(1, 6);
-            int d4 = random.Next(1, DateTime.DaysInMonth(a4, mes4));
-            DateTime fechaUltimaActualizacion4 = new DateTime(a4, mes4, d4);
-            Bodega bodega4 = new Bodega("Bodega4", "descripcion4", fechaUltimaActualizacion4, 6, "historia de la bodega 1");
-            // Vinos para bodega4
+            // Maridajes del sistema
+            for (int i = 0; i < maridajeDescripciones.Length; i++)
+            {
+                string descripcion = maridajeDescripciones[i];
+                string nombre = "Maridaje" + (i + 1);
+                Maridaje maridaje = new Maridaje(descripcion, nombre);
+                this.maridajes.Add(maridaje);
+            }
+            string[] nombreBodegas = new string[]
+            {
+                "Catena Zapata",
+                "Bodega Norton",
+                "Trapiche",
+                "Bodegas Salentein",
+                "Bodega Luigi Bosca",
+                "Bodega El Esteco",
+                "Bodega Colomé",
+                "Bodega Zuccardi",
+                "Bodega La Rural",
+                "Bodega Vistalba",
+                "Bodega Familia Schroeder",
+    
+            };
+
+            // Bodegas
+            for (int b = 0; b < (nombreBodegas.Length-1); b++)
+            {
+                // nombre
+                //int indiceAleatorio = random.Next(nombreBodegas.Length);
+                string nombreBodega = nombreBodegas[b];
+
+                // fechaUltimaActualizacion random
+                int año = random.Next(2023, 2025);
+                int mes = random.Next(1, 13);
+                int dia = random.Next(1, DateTime.DaysInMonth(año, mes));
+                DateTime fechaUltimaActualizacion = new DateTime(año, mes, dia);
+
+                // periodo de actualizacion
+                int periodo = random.Next(1, 13);
+
+                // Crear instancia de Bodega con los datos generados
+                Bodega bodega = new Bodega(nombreBodega, "descripcion"+b, fechaUltimaActualizacion, periodo, "historia de la bodega"+b);
+                // Agregar la bodega a la lista de bodegas
+                this.bodegas.Add(bodega);
+            }
             
-            for (int i = 1; i <= 10; i++)
+            //Vinos
+
+            for (int i = 1; i <= (nombresVinosPopulares.Count()-1); i++)
             {
                 // Generar datos para el vino
-                int yearAñada = random.Next(1950, 2025);
-                int yearFecha = random.Next(2020, 2025);
-                int month = random.Next(1, 13);
-                int day = random.Next(1, DateTime.DaysInMonth(yearFecha, month));
-                DateTime fechaAleatoria = new DateTime(yearFecha, month, day);
-                int precioAleatorio = random.Next(5000, 100001);
+                int añoAñada = random.Next(1950, 2025);
 
-                // Generar descripción de maridajes aleatorias
-                string descripcionMaridaje1 = maridajeDescripciones[random.Next(maridajeDescripciones.Length)];
-                string descripcionMaridaje2 = maridajeDescripciones[random.Next(maridajeDescripciones.Length)];
-                string nombreMaridaje1 = $"Maridaje{i}";
-                string nombreMaridaje2 = $"Maridaje{i + 1}";
-                Maridaje maridaje1 = new Maridaje(descripcionMaridaje1, nombreMaridaje1);
-                Maridaje maridaje2 = new Maridaje(descripcionMaridaje2, nombreMaridaje2);
+                int añoFAleatoria = random.Next(2022, 2025);
+                int mesFAleatoria = random.Next(1,7);
+                int diaFAleatoria = random.Next(1, DateTime.DaysInMonth(añoFAleatoria, mesFAleatoria));
+                DateTime fechaActualizacion = new DateTime(añoFAleatoria, mesFAleatoria, diaFAleatoria);
 
-                // Generar datos para el varietal
-                // Elegir una variedad de uva al azar
-                string[] variedades;
-                if (random.Next(2) == 0)
+                int precioAleatorio = random.Next(1000, 100001);
+
+                string notaDeCata = "";
+
+                // Maridajes
+                List<Maridaje> maridajeVino = new List<Maridaje>();
+                int nroM = random.Next(1, 6); 
+                for (int z = 0; z < nroM; z++)
                 {
-                    variedades = variedadesTintas;
+                    maridajeVino.Add(this.maridajes[random.Next(nroM)]);
                 }
-                else
+
+                // Varietales
+                List<Varietal> varietalesVino = new List<Varietal>();
+                int nroV = random.Next(1, 6); // nro al azar entre 1 y 5, pq tengo 5 tiposUva en el sistema
+                for (int z = 0; z < nroV; z++)
                 {
-                    variedades = variedadesBlancas;
+                    string nombreVarietal = $"Varietal : {z}";
+                    string descripcionVarietal = $"Vino varietal con predominancia de una variedad de uva";
+                    int porcentajeComposicion = random.Next(80, 101); // Entre 80% y 100%
+                    Varietal v = new Varietal(nombreVarietal, descripcionVarietal, porcentajeComposicion, this.tiposUva[random.Next(nroV)]);
+                    varietalesVino.Add(v);
                 }
-                string nombreUva = variedades[random.Next(variedades.Length)];
-                string descripcionUva = $"Descripción de la uva {nombreUva}";
 
-                // Crear instancia de TipoUva
-                TipoUva tipoUva = new TipoUva(descripcionUva, nombreUva);
-                string nombreVarietal = $"Varietal{i}";
-                string descripcionVarietal = $"Vino varietal con predominancia de una variedad de uva"+ nombreUva;
-                int porcentajeComposicion = random.Next(80, 101); // Entre 80% y 100%
-
-                
-
-                // Crear instancia de Varietal
-                Varietal varietal = new Varietal(nombreVarietal, descripcionVarietal, porcentajeComposicion, tipoUva);
+                //Bodega para el vino
+                var indiceAleatorio = random.Next(0,this.bodegas.Count());
+                var bodegaAleatoria = this.bodegas[indiceAleatorio];
 
                 // Crear instancia de Vino con los datos generados
-                string nombreVino = nombresVinosPopulares[random.Next(nombresVinosPopulares.Length)];
-                Vino vino = new Vino(yearAñada.ToString(), fechaAleatoria, "https://picsum.photos/200/", nombreVino, $"{descripcionMaridaje1}, {descripcionMaridaje2}", precioAleatorio);
-                vino.Varietal.Add(varietal);
-                vino.Maridaje.Add(maridaje1);
-                vino.Maridaje.Add(maridaje2);
+                string nombreVino = nombresVinosPopulares[i];
+                string linkImg = "https://picsum.photos/" + i;
 
-                // Establecer fechaActualizacion
-                vino.FechaActualizacion = fechaAleatoria;
+                Vino vino = new Vino(añoAñada.ToString(), fechaActualizacion, linkImg, nombreVino, notaDeCata, precioAleatorio, bodegaAleatoria);
+                vino.Maridaje = maridajeVino;
+                vino.Varietal = varietalesVino;
 
-                // Agregar vino a bodega3
-                bodega3.MisVinos.Add(vino);
+                // se carga a la bodega el vino en cuestion
+                bodegaAleatoria.MisVinos.Add(vino);
+                vinosDelSistema.Add(vino);
+                //this.vinosDelSistema.Add(vino);
             }
+            // Enofilos del sistema
 
-
-
-
-            // tipoUva - mock -  
-
-            TipoUva tip1 = new TipoUva("Descripcion 1 ", "Merlot");
-                this.tiposUva.Add(tip1);
-                TipoUva tip2 = new TipoUva("Descripcion2 ", "Syrah");
-                this.tiposUva.Add(tip2);
-                TipoUva tip3 = new TipoUva("Descripcion 3 ", "Cabernet Sauvignon");
-                this.tiposUva.Add(tip3);
-                TipoUva tip4 = new TipoUva("Descripcion 4 ", "Verdejo");
-                this.tiposUva.Add(tip4);
-                TipoUva tip5 = new TipoUva("Descripcion 5 ", "Godello");
-                this.tiposUva.Add(tip5);
-
-                // maridajes -mock- 
-                Maridaje m1 = new Maridaje("Realza las características de los platos", "Maridaje1");
-                this.maridajes.Add(m1);
-                Maridaje m2 = new Maridaje("Combina a la perfección con carnes rojas", "Maridaje2");
-                this.maridajes.Add(m2);
-                Maridaje m3 = new Maridaje("Ideal para acompañar platos de pescado", "Maridaje3");
-                this.maridajes.Add(m3);
-                Maridaje m4 = new Maridaje("Acentúa los sabores de quesos suaves", "Maridaje4");
-                this.maridajes.Add(m4);
-                Maridaje m5 = new Maridaje("Equilibra los sabores de platos agridulces", "Maridaje5");
-                this.maridajes.Add(m5);
-            // todos los enofilos del sistema 
-           
-            // Crear objetos Enofilo con un usuario asignado de la lista de usuarios
-            List<Enofilo> enofilos = new List<Enofilo>();
-            for (int i = 0; i < 10; i++)
+            for (int i = 1; i <= 20; i++)
             {
-                string apellido = "Apellido" + (i + 1);
-                string imagenPerfil = "imagen" + (i + 1);
-                string nombreEnofilo = "Enofilo" + (i + 1);
-                for (int j = 0; j < 10; j++)
-                {
-                    string contraseña = "Contraseña" + (j + 1);
-                    string nombreUsuario = "Usuario" + (j + 1);
-                    bool premium = (j % 2 == 0); // true para índices pares, false para índices impares
-                    Usuario usuario = new Usuario(contraseña, nombreUsuario, premium);
-                    Enofilo enofilo = new Enofilo(apellido, imagenPerfil, nombreEnofilo, usuario);
-                    enofilos.Add(enofilo);
-                }
-                
-                
-            }
+                string nombreEnofilo = nombres[random.Next(nombres.Length)];
+                string linkImgPerfil = "https://example.com/images/" + i;
+                string nombre = "Usuario" + i;
+                string password = "password" + i;
+                bool activo = i % 2 == 0; // Alternar entre true y false
 
+                Usuario usuario = new Usuario(password, nombre, activo);
+                Enofilo enofilo = new Enofilo(nombreEnofilo, linkImgPerfil, nombre, usuario);
+                // Vinos favoritos del Enofilo
+                for (int j = 1; j <= random.Next(vinosDelSistema.Count); j++)
+                {
+                    if (enofilo.Favorito == null)
+                    {
+                        enofilo.Favorito = new List<Vino>(); 
+                    }
+                    enofilo.Favorito.Add(vinosDelSistema[j]);
+                }
+                this.enofilosSeguidores.Add(enofilo);
+            }
 
         }
-        //metodos 
 
+        //metodos 
         public void importarActVinosBodega()
         {
             //Busca y muestra todas las bodegas que tienen actualizaciones disponibles
@@ -419,8 +336,6 @@ namespace PPAI.Gestores
         public void obtenerActualizacionesBodega(string nombreBodega)
         {
             //nuestra Interfaz busca los vinos del sistema bodega usando su API
-            
-            
             this.APISistemaBodega = new APISistemaBodega(nombreBodega);
             this.vinosImportados =  this.APISistemaBodega.ObtenerActualizacionesBodega(nombreBodega);
             this.obtenerVinosAActualizar();
@@ -428,11 +343,10 @@ namespace PPAI.Gestores
         public void obtenerVinosAActualizar()
         {
             foreach (var v in this.vinosImportados){
-                string nombreVinoImportado = "";
-                nombreVinoImportado = v.Nombre;
+                string nombreVinoImportado = v.Nombre;
                 if (bodegaElegida.tieneVino(nombreVinoImportado))
                 {
-                    this.vinosListoParaActualizar.Add(v);
+                    this.vinosParaActualizar.Add(v);
                 }
             }
             this.crearOActualizarVinos();
@@ -441,95 +355,97 @@ namespace PPAI.Gestores
         {
             foreach (var v in this.vinosImportados)
             {
-                //valida para c/u de los vinos importados si es un vino a actulizar en la bodega seleccionada
+                //valida para c/u de los vinos importados si es un vino para actualizar en la bodega seleccionada
                 
-                if (vinosListoParaActualizar.Contains(v)) //
+                if (vinosParaActualizar.Contains(v)) // este vino importado pertenece a la bodega,se actualiza sus parametros
                 {
-                     
                     this.actualizarVino(v);
                 }
-                // este  vino importado no pertenece hasta ahora a la bodega seleccionada,se crea el nuevo vino
-                else
-                {
-                    
+                else // este  vino importado no pertenece hasta ahora a la bodega,se crea el nuevo vino
+                {                    
                     this.hayQueCrearVino(v);
                 }
             }
             this.actualizarFechaActualizacionBodega();
             this.pantalla.mostrarResumenVinosImportados(this.bodegaElegida);
-            //this.buscarSeguidoresDeBodega();
+            this.buscarSeguidoresDeBodega();
+            this.finCU();
         }
 
          
 
         public void actualizarVino(VinosSistemaBodega vinoAActualizar) {
             //convertir de  vinoAActualizar  a Vino
-            Vino v = new Vino(vinoAActualizar.Añada, vinoAActualizar.FechaActualizacion, vinoAActualizar.ImagenEtiqueta, vinoAActualizar.Nombre, vinoAActualizar.NotaDeCataBodega, vinoAActualizar.PrecioARS);
-            this.bodegaElegida.actualizarVino(v);
+            
+            DateTime fecha = vinoAActualizar.FechaActualizacion;
+            string img = vinoAActualizar.ImagenEtiqueta;
+            string nombre = vinoAActualizar.Nombre;
+            string nota = vinoAActualizar.NotaDeCataBodega;
+            int precio = vinoAActualizar.PrecioARS;
+            this.bodegaElegida.actualizarVino(nombre,precio,nota,img,fecha);
         }
         public void hayQueCrearVino(VinosSistemaBodega nuevoVino)
-        {
-            //creo Vino segun los datos que vienen del sistema Bodega
-            Vino v = new Vino(nuevoVino.Añada, nuevoVino.FechaActualizacion, nuevoVino.ImagenEtiqueta, nuevoVino.Nombre, nuevoVino.NotaDeCataBodega, nuevoVino.PrecioARS);
-            
-            // validar si el vino tiene ALGUN maridaje
+        { 
+            // validar si el vino importado tiene ALGUN maridaje
             List<Maridaje> maridajesParaNuevoVino = new List<Maridaje>();
             if (nuevoVino.Maridajes.Count >0)
             {
-                 
-                // se debe cargar maridajes con los datos del nuevo vino
                 maridajesParaNuevoVino = this.buscarMaridaje(nuevoVino.Maridajes);
             }
-
+ 
             //validar  si el vino tiene ALGUN tipo de uva
             List<TipoUva> tipoUvasParaNuevoVino = new List<TipoUva>();
             if (nuevoVino.Varietales.Count >0)
             {
-                // se debe cargar tiposDeUva con los datos del del sistema Bodega
-               //tipoUvasParaNuevoVino = this.buscarTipoUva(nuevoVino.Varietales);
+               tipoUvasParaNuevoVino = this.buscarTipoUva(nuevoVino.Varietales);
             }
-            
-
-            this.crearVino(maridajesParaNuevoVino,tipoUvasParaNuevoVino,v);
+            string añada = nuevoVino.Añada;
+            DateTime fecha = nuevoVino.FechaActualizacion;
+            string img = nuevoVino.ImagenEtiqueta;
+            string nombre = nuevoVino.Nombre;
+            string nota = nuevoVino.NotaDeCataBodega;
+            int precio = nuevoVino.PrecioARS;
+            Bodega bodega = this.bodegaElegida;
+            this.crearVino(añada, fecha, img, nombre, nota, precio, maridajesParaNuevoVino, tipoUvasParaNuevoVino, nuevoVino.Varietales,bodega);
         }
 
-        public void crearVino(List<Maridaje> maridajes,List<TipoUva>tiposUva,Vino vino)
+        public void crearVino(string añada, DateTime fecha,string img, string nombre ,string nota, int precio, List<Maridaje> maridajesParaNuevoVino, List<TipoUva> tipoUvasParaNuevoVino, List<string[]> varietales,Bodega b )
         {
-            Vino nuevoVino = new Vino();
-            nuevoVino = vino;
+            Vino nuevoVino = new Vino(añada,fecha,img,nombre,nota,precio,b);
             nuevoVino.Maridaje = maridajes;
-            nuevoVino.crearVarietal();
+            nuevoVino.crearVarietal(varietales,tipoUvasParaNuevoVino);
             
         }
 
-        public List<Maridaje> buscarMaridaje(List<Maridaje> maridajes) {
+        public List<Maridaje> buscarMaridaje(List<string> maridajesVinoNuevo) {
+
             List<Maridaje> maridajesUtiles = new List<Maridaje>();
-            foreach (Maridaje mNuevoVino in maridajes)
+            foreach (var mNuevoVino in maridajesVinoNuevo)
             {
                 foreach (Maridaje mDelSistema in this.maridajes)
                 {
-                    if (mDelSistema.sosMaridaje(mNuevoVino.Nombre))
+                    if (mDelSistema.esElMaridaje(mNuevoVino))
                     {
-                        maridajesUtiles.Add(mDelSistema);
-                        
+                        maridajesUtiles.Add(mDelSistema); 
                     }   
                 }
             }
             return maridajesUtiles;
         }
-        public List<TipoUva> buscarTipoUva(List<TipoUva> tiposDeUva){
-            List<TipoUva> tipoUvaUtil = new List<TipoUva>();    
-            foreach (TipoUva tipo in tiposDeUva)
+        public List<TipoUva> buscarTipoUva(List<string[]> varietalesNuevoVino){
+            List<TipoUva> tiposUvaUtil = new List<TipoUva>();
+            
+            foreach (string[] varietal in varietalesNuevoVino)
             {
-                foreach (TipoUva tipoUvaSistema in this.tiposUva)
+                for(int i = 0;i < this.tiposUva.Count; i++)
                 {
-                    if (tipoUvaSistema.esElTipoUva(tipo.Nombre))
+                    if (this.tiposUva[i].esElTipoUva(varietal[3]))
                     {
-                        tipoUvaUtil.Add(tipoUvaSistema);
+                        tiposUvaUtil.Add(tiposUva[i]);
                     }
                 }
             }
-            return tipoUvaUtil;
+            return tiposUvaUtil;
         }
         public void actualizarFechaActualizacionBodega() {
             this.bodegaElegida.setFechaUltimaActualizacion(this.getFechaActual());
@@ -546,7 +462,7 @@ namespace PPAI.Gestores
             }
             this.interfazNotificacionPush = new InterfazNotificacionPush();
             this.interfazNotificacionPush.notificarNovedadVinoParaBodega(enofilosANotificar);
-            this.finCU();
+            
         }             
         public void finCU() {
             MessageBox.Show("Fin CU.");

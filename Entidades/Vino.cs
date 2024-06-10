@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 
 namespace PPAI.Entidades
 {
@@ -18,7 +19,7 @@ namespace PPAI.Entidades
 
         private List<Maridaje> maridaje;
         private List<Varietal> varietal;
-
+        private Bodega bodega;
         public string Añada { get => añada; set => añada = value; }
         public DateTime FechaActualizacion { get => fechaActualizacion; set => fechaActualizacion = value; }
         public string ImagenEtiqueta { get => imagenEtiqueta; set => imagenEtiqueta = value; }
@@ -27,29 +28,38 @@ namespace PPAI.Entidades
         public int PrecioARS { get => precioARS; set => precioARS = value; }
         public List<Maridaje> Maridaje { get => maridaje; set => maridaje = value; }
         public List<Varietal> Varietal { get => varietal; set => varietal = value; }
+        public Bodega Bodega { get => bodega; set => bodega = value; }
 
         //constructor
         public Vino() { }
-        public Vino(string añada, DateTime fechaActualización, string imagenEtiqueta, string nombre, string notaDeCataBodega, int precioARS)
+        public Vino(string añada, DateTime fechaActualización, string imagenEtiqueta, string nombre, string notaDeCataBodega, int precioARS,Bodega bodega)
         {
             this.añada = añada;
-            this.fechaActualizacion = fechaActualizacion;
+            this.fechaActualizacion = fechaActualización;
             this.imagenEtiqueta = imagenEtiqueta;
             this.nombre = nombre;
             this.notaDeCataBodega = notaDeCataBodega;
             this.precioARS = precioARS;
-
-
-
-            //faltan pasar el maridaje y el varietal 
-            this.maridaje = new List<Maridaje>();
-            
+            this.Bodega = bodega; 
+            this.maridaje = new List<Maridaje>();     
             this.varietal = new List<Varietal>();
-            this.crearVarietal();
-
         }
         //metodos
-        public void crearVarietal() { }
+        public void crearVarietal(List<string[]>varietales,List<TipoUva> tiposDeUva) {
+            foreach (string[] varietal in varietales)
+            {
+                string nV = varietal[0];
+                string dV = varietal[1];
+                int pC = int.Parse(varietal[2]);
+                TipoUva uva = new TipoUva();
+                for (int i = 0; i < tiposDeUva.Count; i++) {
+                    uva = tiposDeUva[i];
+                }
+                Varietal v = new Varietal(nV, dV, pC,uva);
+                this.Varietal.Add(v);
+            }
+
+        }
         public Boolean esDeBodega(string nombreVino) {
             
             if ( this.nombre == nombreVino )
@@ -59,7 +69,7 @@ namespace PPAI.Entidades
             return false;
         }
         public Boolean sosVinoParaActualizar(string nombreDeVinoParaActualizar){
-            if (nombreDeVinoParaActualizar == this.getNombre())
+            if (this.Nombre == nombreDeVinoParaActualizar)
             {
                 return true;
             }

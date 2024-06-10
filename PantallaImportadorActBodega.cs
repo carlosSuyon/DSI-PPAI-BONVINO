@@ -32,28 +32,32 @@ namespace PPAI
 
         public void mostrarBodegas(List<Bodega> bodegas)
         {
-            if (bodegas.Count == 0)
+
+            if ((bodegas.Count == 0))
             {
                 MessageBox.Show("No hay bodegas con actualizaciones disponibles.");
             }
             else
             {
 
-                foreach (var objeto in bodegas)
+                foreach (Bodega b in bodegas)
                 {
+                    if (b.MisVinos.Count() > 0)
+                    {
+                        DataGridViewRow fila = new DataGridViewRow();
 
-                    DataGridViewRow fila = new DataGridViewRow();
+                        DataGridViewCell nombreBodega = new DataGridViewTextBoxCell();
+                        nombreBodega.Value = b.getNombre();
 
-                    DataGridViewCell nombreBodega = new DataGridViewTextBoxCell();
-                    nombreBodega.Value = objeto.getNombre();
+                        fila.Cells.Add(nombreBodega);
+                        gdrBodegasDisponibles.Rows.Add(fila);
+                        // Establecer el modo de selección en FullRowSelect para seleccionar filas completas
+                        gdrBodegasDisponibles.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
-                    fila.Cells.Add(nombreBodega);
-                    gdrBodegasDisponibles.Rows.Add(fila);
-                    // Establecer el modo de selección en FullRowSelect para seleccionar filas completas
-                    gdrBodegasDisponibles.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                        // Desactivar la edición de celdas
+                        gdrBodegasDisponibles.ReadOnly = true;
+                    }
 
-                    // Desactivar la edición de celdas
-                    gdrBodegasDisponibles.ReadOnly = true;
                 }
 
             }
@@ -72,22 +76,33 @@ namespace PPAI
         }
         private void bodegasDisponibles_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            //
-            string bodegaSeleccionada =
-            gdrBodegasDisponibles.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+            // Verificar si se hizo clic en una fila (en lugar de en un encabezado de columna u otra área del control)
+            if (e.RowIndex >= 0)
+            {
+                // Obtener la fila seleccionada
+                DataGridViewRow filaSeleccionada = gdrBodegasDisponibles.Rows[e.RowIndex];
 
-            MessageBox.Show("Se selecciono la bodega: " + bodegaSeleccionada);
-            tomarSelecciónBodega(bodegaSeleccionada);
+                // Obtener los valores de las celdas de la fila seleccionada
+                string nombreBodega = filaSeleccionada.Cells["Nombre"].Value.ToString(); // Reemplaza "Nombre" por el nombre de la columna que contiene el nombre de la bodega u otro identificador único
+
+                // Mostrar el nombre de la bodega seleccionada
+                MessageBox.Show("Se seleccionó la bodega: " + nombreBodega);
+
+                // Llamar a la función para tomar la selección de la bodega
+                this.tomarSelecciónBodega(nombreBodega);
+                // Deshabilitar la grilla para que no sea manipulable
+                gdrBodegasDisponibles.ReadOnly = true;
+            }
 
         }
 
         public void mostrarResumenVinosImportados(Bodega bSeleccionada)
         {
             gdrVinosBodega.Visible = true;
-            label3.Visible  = true;
+            label4.Visible = true;
             if (bSeleccionada.MisVinos.Count == 0)
             {
-                MessageBox.Show("No hay resumen para la bodega" + bSeleccionada.Nombre);
+                MessageBox.Show("No hay resumen para la bodega :" + bSeleccionada.Nombre);
             }
             else
             {
@@ -100,7 +115,7 @@ namespace PPAI
                     nombreVino.Value = objeto.getNombre();
 
                     DataGridViewCell FechaActulizacion = new DataGridViewTextBoxCell();
-                    FechaActulizacion.Value = objeto.FechaActualizacion;
+                    FechaActulizacion.Value = objeto.FechaActualizacion.ToShortDateString();
 
                     DataGridViewCell añadaVino = new DataGridViewTextBoxCell();
                     añadaVino.Value = objeto.Añada;
@@ -113,18 +128,18 @@ namespace PPAI
                     fila.Cells.Add(FechaActulizacion);
                     fila.Cells.Add(añadaVino);
                     fila.Cells.Add(precioVino);
-                    
+
                     gdrVinosBodega.Rows.Add(fila);
                     // Establecer el modo de selección en FullRowSelect para seleccionar filas completas
                     gdrVinosBodega.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
                     // Desactivar la edición de celdas
                     gdrVinosBodega.ReadOnly = true;
-                    
-                    
+
+
                 }
                 gdrBodegasDisponibles.Enabled = false;
-                this.miGestor.buscarSeguidoresDeBodega();
+                //this.miGestor.buscarSeguidoresDeBodega();
             }
 
         }
@@ -146,6 +161,11 @@ namespace PPAI
         }
 
         private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label4_Click(object sender, EventArgs e)
         {
 
         }

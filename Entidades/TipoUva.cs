@@ -21,13 +21,12 @@ namespace PPAI.Entidades
         public string Descripcion { get => descripcion; set => descripcion = value; }
 
         public Boolean esElTipoUva(string tipoUvaDelNuevoVino)
-        {
-            Boolean x = false;
+        {       
             if (this.nombre == tipoUvaDelNuevoVino)
             {
                    return true;
             }
-            return x;
+            return false;
         }
     }
 }

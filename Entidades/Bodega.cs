@@ -28,7 +28,7 @@ public class Bodega()
         this.fechaUltimaActualizacion = fechaUltimaActualizacion;
         this.periodoActualizacion = periodoActualizacion;
         this.historia = historia;
-        this.misVinos = [];
+        this.MisVinos = new List<Vino>();
         
     }
 
@@ -62,26 +62,25 @@ public class Bodega()
         }
     }
     public Boolean tieneVino(string nombreVino){
-        //si el nombreVino del vino importado coincide con el nombre de algun vino de la coleccion de vino de la bodega
+        //si el nombreVino del vino importado coincide con el nombre de algun vino de la coleccion de vinos de la bodega
         foreach (Vino vinoDeBodega in this.misVinos) {
             if (vinoDeBodega.esDeBodega(nombreVino))
             {
                 return true;
             }
-            
         }
         return false;   
     }
 
-    public void actualizarVino(Vino vinoParaActualizar) {
+    public void actualizarVino(string nombre,int precio,string nota,string img,DateTime fecha) {
         foreach (Vino v in this.MisVinos)
         {
-            if (v.sosVinoParaActualizar(vinoParaActualizar.Nombre))
+            if (v.sosVinoParaActualizar(nombre))
             {
-                v.PrecioARS = vinoParaActualizar.PrecioARS;
-                v.NotaDeCataBodega = vinoParaActualizar.NotaDeCataBodega;
-                v.ImagenEtiqueta = vinoParaActualizar.ImagenEtiqueta;
-                v.FechaActualizacion = vinoParaActualizar.FechaActualizacion; 
+                v.PrecioARS = precio;
+                v.NotaDeCataBodega = nota;
+                v.ImagenEtiqueta =img;
+                v.FechaActualizacion =fecha; 
             }
         }
 

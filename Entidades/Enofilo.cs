@@ -15,13 +15,15 @@ namespace PPAI.Entidades
 
         private Usuario usuario;
 
-        private List<Vino> favoritos;
+        private List<Vino> favorito;
         private List<Siguiendo> seguido;
 
         // getters and setters
         public string Apellido { get => apellido; set => apellido = value; }
         public string ImagenPerfil { get => imagenPerfil; set => imagenPerfil = value; }
         public string Nombre { get => nombre; set => nombre = value; }
+        public List<Vino> Favorito { get => favorito; set => favorito = value; }
+        public List<Siguiendo> Seguido { get => seguido; set => seguido = value; }
 
         //constructor
         public Enofilo(string apellido, string imagenPerfil, string nombre,Usuario usu)
@@ -30,6 +32,7 @@ namespace PPAI.Entidades
             this.ImagenPerfil = imagenPerfil;
             this.Nombre = nombre;
             this.usuario = usu;
+            this.Seguido = new List<Siguiendo>();
         }
         //metodos
         public Boolean sosSeguidorBodega(Bodega bodega)

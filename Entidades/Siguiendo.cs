@@ -5,7 +5,30 @@
         // atributos
         private DateTime fechaInicio;
         private DateTime fechaFin;
+        private Bodega bodega;
+        private Enofilo amigo;
 
+        public Bodega Bodega
+        {
+            get { return bodega; }
+            set
+            {
+                if (amigo != null)
+                    throw new InvalidOperationException("La relación con Enofilo ya está establecida.");
+                bodega = value;
+            }
+        }
+
+        public Enofilo Enofilo
+        {
+            get { return amigo; }
+            set
+            {
+                if (bodega != null)
+                    throw new InvalidOperationException("La relación con Bodega ya está establecida.");
+                amigo = value;
+            }
+        }
         //constructor
         public Siguiendo() { }
         public Siguiendo(DateTime fechaInicio, DateTime fechaFin)
@@ -23,8 +46,8 @@
         // metodos 
 
         public Boolean sosDeBodega(Bodega bodega) {
-            // me falta buscar como programar las relaciones ME
-            return false;
+
+            return (bodega != null && bodega.Equals(bodega));
         }
 
     }

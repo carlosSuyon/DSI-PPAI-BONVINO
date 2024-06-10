@@ -28,16 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             label1 = new Label();
             gdrBodegasDisponibles = new DataGridView();
             Nombre = new DataGridViewTextBoxColumn();
             label2 = new Label();
-            label3 = new Label();
             gdrVinosBodega = new DataGridView();
             dataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
             FechaActulizacion = new DataGridViewTextBoxColumn();
             Añada = new DataGridViewTextBoxColumn();
             PrecioARS = new DataGridViewTextBoxColumn();
+            label4 = new Label();
             ((System.ComponentModel.ISupportInitialize)gdrBodegasDisponibles).BeginInit();
             ((System.ComponentModel.ISupportInitialize)gdrVinosBodega).BeginInit();
             SuspendLayout();
@@ -56,16 +58,25 @@
             // gdrBodegasDisponibles
             // 
             gdrBodegasDisponibles.AllowUserToAddRows = false;
-            gdrBodegasDisponibles.Anchor = AnchorStyles.None;
+            gdrBodegasDisponibles.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             gdrBodegasDisponibles.BackgroundColor = SystemColors.ActiveCaption;
             gdrBodegasDisponibles.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             gdrBodegasDisponibles.Columns.AddRange(new DataGridViewColumn[] { Nombre });
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.Window;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle1.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.False;
+            gdrBodegasDisponibles.DefaultCellStyle = dataGridViewCellStyle1;
             gdrBodegasDisponibles.Location = new Point(12, 115);
+            gdrBodegasDisponibles.MaximumSize = new Size(300, 300);
             gdrBodegasDisponibles.MultiSelect = false;
             gdrBodegasDisponibles.Name = "gdrBodegasDisponibles";
             gdrBodegasDisponibles.RowHeadersWidth = 62;
-            gdrBodegasDisponibles.ScrollBars = ScrollBars.None;
-            gdrBodegasDisponibles.Size = new Size(278, 215);
+            gdrBodegasDisponibles.ScrollBars = ScrollBars.Vertical;
+            gdrBodegasDisponibles.Size = new Size(300, 175);
             gdrBodegasDisponibles.TabIndex = 1;
             gdrBodegasDisponibles.CellContentClick += bodegasDisponibles_CellContentClick;
             // 
@@ -79,41 +90,40 @@
             // 
             // label2
             // 
-            label2.Location = new Point(12, 60);
+            label2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            label2.AutoSize = true;
+            label2.Location = new Point(35, 72);
             label2.Name = "label2";
-            label2.Size = new Size(278, 38);
+            label2.Size = new Size(147, 15);
             label2.TabIndex = 2;
             label2.Text = "Bodegas con actualizacion";
             label2.TextAlign = ContentAlignment.MiddleCenter;
             label2.UseMnemonic = false;
             label2.Click += label2_Click;
             // 
-            // label3
-            // 
-            label3.Location = new Point(443, 60);
-            label3.Name = "label3";
-            label3.Size = new Size(463, 38);
-            label3.TabIndex = 3;
-            label3.Text = "Resumen vinos de Bodega:";
-            label3.TextAlign = ContentAlignment.MiddleCenter;
-            label3.UseMnemonic = false;
-            label3.Visible = false;
-            label3.Click += label3_Click;
-            // 
             // gdrVinosBodega
             // 
             gdrVinosBodega.AllowUserToAddRows = false;
             gdrVinosBodega.AllowUserToDeleteRows = false;
-            gdrVinosBodega.Anchor = AnchorStyles.None;
+            gdrVinosBodega.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             gdrVinosBodega.BackgroundColor = SystemColors.ActiveCaption;
             gdrVinosBodega.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             gdrVinosBodega.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn1, FechaActulizacion, Añada, PrecioARS });
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Window;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            gdrVinosBodega.DefaultCellStyle = dataGridViewCellStyle2;
             gdrVinosBodega.Location = new Point(430, 115);
+            gdrVinosBodega.MinimumSize = new Size(539, 108);
             gdrVinosBodega.MultiSelect = false;
             gdrVinosBodega.Name = "gdrVinosBodega";
             gdrVinosBodega.RowHeadersWidth = 62;
-            gdrVinosBodega.ScrollBars = ScrollBars.None;
-            gdrVinosBodega.Size = new Size(512, 215);
+            gdrVinosBodega.ScrollBars = ScrollBars.Vertical;
+            gdrVinosBodega.Size = new Size(539, 175);
             gdrVinosBodega.TabIndex = 4;
             gdrVinosBodega.Visible = false;
             // 
@@ -123,7 +133,7 @@
             dataGridViewTextBoxColumn1.MinimumWidth = 8;
             dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
             dataGridViewTextBoxColumn1.Resizable = DataGridViewTriState.False;
-            dataGridViewTextBoxColumn1.Width = 175;
+            dataGridViewTextBoxColumn1.Width = 200;
             // 
             // FechaActulizacion
             // 
@@ -143,13 +153,27 @@
             PrecioARS.Name = "PrecioARS";
             PrecioARS.Width = 75;
             // 
+            // label4
+            // 
+            label4.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            label4.AutoSize = true;
+            label4.Location = new Point(430, 72);
+            label4.Name = "label4";
+            label4.Size = new Size(218, 15);
+            label4.TabIndex = 5;
+            label4.Text = "Resumen Vinos de bodega seleccionada";
+            label4.TextAlign = ContentAlignment.MiddleCenter;
+            label4.UseMnemonic = false;
+            label4.Click += label4_Click;
+            // 
             // PantallaImportadorActBodega
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoSize = true;
             ClientSize = new Size(981, 449);
+            Controls.Add(label4);
             Controls.Add(gdrVinosBodega);
-            Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(gdrBodegasDisponibles);
             Controls.Add(label1);
@@ -160,6 +184,7 @@
             ((System.ComponentModel.ISupportInitialize)gdrBodegasDisponibles).EndInit();
             ((System.ComponentModel.ISupportInitialize)gdrVinosBodega).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -174,5 +199,6 @@
         private DataGridViewTextBoxColumn FechaActulizacion;
         private DataGridViewTextBoxColumn Añada;
         private DataGridViewTextBoxColumn PrecioARS;
+        private Label label4;
     }
 }
