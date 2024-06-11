@@ -24,6 +24,7 @@ namespace PPAI.Entidades
         public string Nombre { get => nombre; set => nombre = value; }
         public List<Vino> Favorito { get => favorito; set => favorito = value; }
         public List<Siguiendo> Seguido { get => seguido; set => seguido = value; }
+        public Usuario Usuario { get => usuario; set => usuario = value; }
 
         //constructor
         public Enofilo(string apellido, string imagenPerfil, string nombre,Usuario usu)
@@ -37,18 +38,16 @@ namespace PPAI.Entidades
         //metodos
         public Boolean sosSeguidorBodega(Bodega bodega)
         {
-            Boolean x = false;
             foreach (Siguiendo s in this.seguido)
             {
                 if (s.sosDeBodega(bodega)){
-                    x = true;   
+                    
+                    return true;
                 }
             }
-            return x;
+            return false;
 
         }
-        public string getNombreUsuario(){
-                return this.usuario.getNombre();
-        }
+        
     }
 }

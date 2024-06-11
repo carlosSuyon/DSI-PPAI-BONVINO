@@ -42,6 +42,7 @@ namespace PPAI.Gestores
             this.vinosParaActualizar = new List<VinosSistemaBodega>();
             this.maridajes = new List<Maridaje>();
             this.enofilosSeguidores = new List<Enofilo>();
+            this.enofilosANotificar = new List<string>();
             this.pantalla = pantalla;
             //this.vinosDelSistema = new List<Vino>();    
 
@@ -109,6 +110,15 @@ namespace PPAI.Gestores
                 "María", "Laura", "Ana", "Sofía", "Valentina",
                 "Elena", "Camila", "Julieta", "Abril", "Florencia"
             };
+            string[] apellidos = new string[]
+            {
+                "García", "Martínez", "Rodríguez", "López", "González", "Hernández", "Pérez", "Sánchez", "Ramírez", "Torres",
+                "Flores", "Rivera", "Gómez", "Diaz", "Cruz", "Reyes", "Morales", "Ortiz", "Gutiérrez", "Chávez",
+                "Ramos", "Romero", "Vargas", "Ruiz", "Castillo", "Fernández", "Jiménez", "Mendoza", "Iglesias", "Silva",
+                "Soto", "Delgado", "Ortiz", "Ramos", "Guerrero", "Molina", "Castro", "Suárez", "Domínguez", "Alvarez",
+                "Vega", "Paredes", "Rojas", "Campos", "Mejía", "Herrera", "Aguilar", "Santos", "Montes", "Peña"
+            };
+
             // Definición de nombres de vinos populares y bodegas
             string[] nombresVinosPopulares = new string[]
             {
@@ -266,13 +276,13 @@ namespace PPAI.Gestores
             for (int i = 1; i <= 20; i++)
             {
                 string nombreEnofilo = nombres[random.Next(nombres.Length)];
-                string linkImgPerfil = "https://example.com/images/" + i;
-                string nombre = "Usuario" + i;
+                string apellidoEnofilo = apellidos[random.Next(apellidos.Length)];
+                string linkImgPerfil = "https://example.com/images/" + i;             
                 string password = "password" + i;
                 bool activo = i % 2 == 0; // Alternar entre true y false
 
-                Usuario usuario = new Usuario(password, nombre, activo);
-                Enofilo enofilo = new Enofilo(nombreEnofilo, linkImgPerfil, nombre, usuario);
+                Usuario usuario = new Usuario(password, nombreEnofilo, activo);
+                Enofilo enofilo = new Enofilo(apellidoEnofilo, linkImgPerfil, nombreEnofilo, usuario);
                 // Vinos favoritos del Enofilo
                 for (int j = 1; j <= random.Next(vinosDelSistema.Count); j++)
                 {
@@ -282,6 +292,37 @@ namespace PPAI.Gestores
                     }
                     enofilo.Favorito.Add(vinosDelSistema[j]);
                 }
+
+                // Seguidos del enofilo y cada seguido conoce una bodega o un enofilo
+                List<Siguiendo> seguidos = new List<Siguiendo>();
+                int cantidadSeguidos = random.Next(1, 10);
+                for (int k = 0; k < cantidadSeguidos; k++)
+                {
+                    DateTime fechaInicio = DateTime.Now.AddDays(random.Next(1, 365));
+                    DateTime fechaFin = DateTime.Now.AddDays(random.Next(1, 365));
+
+                    Siguiendo siguiendo = new Siguiendo(fechaInicio, fechaFin);
+
+                    if (random.Next(2) == 0) // 50% probabilidad de seguir una bodega
+                    {
+                        siguiendo.Bodega = this.bodegas[random.Next(this.bodegas.Count)];
+                    }
+                    else // 50% probabilidad de seguir un enófilo
+                    {
+                       if(this.enofilosSeguidores.Count > 0)
+                        {
+                            siguiendo.Enofilo = this.enofilosSeguidores[random.Next(this.enofilosSeguidores.Count)];
+                        }
+                        else
+                        {
+                            siguiendo.Bodega = this.bodegas[random.Next(this.bodegas.Count)];
+                        }
+                    }
+
+                    seguidos.Add(siguiendo);
+                }
+                enofilo.Seguido = seguidos;
+
                 this.enofilosSeguidores.Add(enofilo);
             }
 
@@ -291,16 +332,16 @@ namespace PPAI.Gestores
         public void importarActVinosBodega()
         {
             //Busca y muestra todas las bodegas que tienen actualizaciones disponibles
-            List<Bodega> bodegasConActualizacion = new List<Bodega>();
+            List<string> bodegasConActualizacion = new List<string>();
             bodegasConActualizacion = (this.buscarBodegas());
 
             // muestra en la grilla la bodegas (string) en una grilla
             pantalla.mostrarBodegas(bodegasConActualizacion);            
         }
 
-         public List<Bodega> buscarBodegas()
+         public List<string> buscarBodegas()
          {
-            List<Bodega> bodegasParaActualizar = new List<Bodega>();
+            List<string> bodegasParaActualizar = new List<string>();
 
             DateTime fechaActual = this.getFechaActual();
 
@@ -308,7 +349,7 @@ namespace PPAI.Gestores
             {
                 if (bodega.esParaActualizar(fechaActual))
                 {
-                    bodegasParaActualizar.Add(bodega);
+                    bodegasParaActualizar.Add(bodega.Nombre);
                 }
             }
             
@@ -367,7 +408,7 @@ namespace PPAI.Gestores
                 }
             }
             this.actualizarFechaActualizacionBodega();
-            this.pantalla.mostrarResumenVinosImportados(this.bodegaElegida);
+            this.pantalla.mostrarResumenVinosImportados(this.bodegaElegida.Nombre,this.bodegaElegida.MisVinos);
             this.buscarSeguidoresDeBodega();
             this.finCU();
         }
@@ -457,12 +498,16 @@ namespace PPAI.Gestores
                 if (enofilo.sosSeguidorBodega(this.bodegaElegida))
                 {
                     // corregir en el diagrama de secuencia el metodo *notificarNovedadVinoParaBodega(), no lleva asterisco
-                    enofilosANotificar.Add(enofilo.getNombreUsuario());
+                    this.enofilosANotificar.Add(enofilo.Usuario.getNombre() +" " + enofilo.Apellido);
                 }
             }
             this.interfazNotificacionPush = new InterfazNotificacionPush();
-            this.interfazNotificacionPush.notificarNovedadVinoParaBodega(enofilosANotificar);
-            
+
+            if (this.enofilosANotificar.Count > 0)
+            {
+                this.interfazNotificacionPush.notificarNovedadVinoParaBodega(this.enofilosANotificar);
+            }
+
         }             
         public void finCU() {
             MessageBox.Show("Fin CU.");

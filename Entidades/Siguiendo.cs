@@ -46,8 +46,9 @@
         // metodos 
 
         public Boolean sosDeBodega(Bodega bodega) {
-
-            return (bodega != null && bodega.Equals(bodega));
+            Boolean x = false;
+            x = (this.Bodega != null && this.Bodega.Equals(bodega));
+            return x ;
         }
 
     }

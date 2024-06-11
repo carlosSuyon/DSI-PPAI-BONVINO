@@ -1,4 +1,5 @@
-﻿using PPAI.Gestores;
+﻿using PPAI.Entidades;
+using PPAI.Gestores;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -23,14 +24,13 @@ namespace PPAI
 
         }
 
-
         public void habilitarPantalla()
         {
             this.Show();
             this.miGestor.importarActVinosBodega();
         }
 
-        public void mostrarBodegas(List<Bodega> bodegas)
+        public void mostrarBodegas(List<string> bodegas)
         {
 
             if ((bodegas.Count == 0))
@@ -39,24 +39,19 @@ namespace PPAI
             }
             else
             {
-
-                foreach (Bodega b in bodegas)
+                for (int i = 0; i < bodegas.Count; i++)
                 {
-                    if (b.MisVinos.Count() > 0)
-                    {
-                        DataGridViewRow fila = new DataGridViewRow();
+                    DataGridViewRow fila = new DataGridViewRow();
+                    DataGridViewCell nombreBodega = new DataGridViewTextBoxCell();
+                    nombreBodega.Value = bodegas[i];
 
-                        DataGridViewCell nombreBodega = new DataGridViewTextBoxCell();
-                        nombreBodega.Value = b.getNombre();
+                    fila.Cells.Add(nombreBodega);
+                    gdrBodegasDisponibles.Rows.Add(fila);
+                    // Establecer el modo de selección en FullRowSelect para seleccionar filas completas
+                    gdrBodegasDisponibles.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
-                        fila.Cells.Add(nombreBodega);
-                        gdrBodegasDisponibles.Rows.Add(fila);
-                        // Establecer el modo de selección en FullRowSelect para seleccionar filas completas
-                        gdrBodegasDisponibles.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-
-                        // Desactivar la edición de celdas
-                        gdrBodegasDisponibles.ReadOnly = true;
-                    }
+                    // Desactivar la edición de celdas
+                    gdrBodegasDisponibles.ReadOnly = true;
 
                 }
 
@@ -82,8 +77,8 @@ namespace PPAI
                 // Obtener la fila seleccionada
                 DataGridViewRow filaSeleccionada = gdrBodegasDisponibles.Rows[e.RowIndex];
 
-                // Obtener los valores de las celdas de la fila seleccionada
-                string nombreBodega = filaSeleccionada.Cells["Nombre"].Value.ToString(); // Reemplaza "Nombre" por el nombre de la columna que contiene el nombre de la bodega u otro identificador único
+                // Obtener los valores de la celda de la fila seleccionada
+                string nombreBodega = filaSeleccionada.Cells["Nombre"].Value.ToString();
 
                 // Mostrar el nombre de la bodega seleccionada
                 MessageBox.Show("Se seleccionó la bodega: " + nombreBodega);
@@ -95,20 +90,19 @@ namespace PPAI
             }
 
         }
-
-        public void mostrarResumenVinosImportados(Bodega bSeleccionada)
+        public void mostrarResumenVinosImportados(string bSeleccionada, List<Vino> vinos)
         {
             gdrVinosBodega.Visible = true;
             label4.Visible = true;
-            if (bSeleccionada.MisVinos.Count == 0)
+            if (vinos.Count == 0)
             {
-                MessageBox.Show("No hay resumen para la bodega :" + bSeleccionada.Nombre);
+                MessageBox.Show("No hay resumen para la bodega :" + bSeleccionada);
             }
             else
             {
-                foreach (var objeto in bSeleccionada.MisVinos)
+                foreach (var objeto in vinos)
                 {
-
+                    
                     DataGridViewRow fila = new DataGridViewRow();
 
                     DataGridViewCell nombreVino = new DataGridViewTextBoxCell();
@@ -135,11 +129,10 @@ namespace PPAI
 
                     // Desactivar la edición de celdas
                     gdrVinosBodega.ReadOnly = true;
-
-
                 }
+                label4.Text = label4.Text + bSeleccionada;
                 gdrBodegasDisponibles.Enabled = false;
-                //this.miGestor.buscarSeguidoresDeBodega();
+
             }
 
         }
@@ -167,6 +160,25 @@ namespace PPAI
 
         private void label4_Click(object sender, EventArgs e)
         {
+
+        }
+
+        private void btn_Limpiar_Click(object sender, EventArgs e)
+        {
+            // Limpiar la selección del DataGridView de Bodegas 
+            if (gdrBodegasDisponibles != null)
+            {
+                gdrBodegasDisponibles.ClearSelection();
+                gdrBodegasDisponibles.Enabled = true;
+
+                // Limpiar el contenido del DataGridView de vinos
+                gdrVinosBodega.Rows.Clear();
+                gdrVinosBodega.Visible = false;
+                label4.Visible = false;
+                label4.Text = "Resumen Vinos de bodega :  ";
+
+            }
+            MessageBox.Show("Se ha limpiado la selección de la bodega y el contenido de la grilla de vinos.");
 
         }
     }
