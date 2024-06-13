@@ -14,14 +14,13 @@ namespace PPAI
 {
     public partial class PantallaImportadorActBodega : Form
     {
-
-        private GestorImportarActBodega miGestor = new GestorImportarActBodega();
+        //atributo pantalla
+        private GestorImportarActBodega miGestor;
         public PantallaImportadorActBodega()
         {
             InitializeComponent();
-            //instacia un gestor 
+            //instacia un objeto gestor 
             this.miGestor = new GestorImportarActBodega(this);
-
         }
 
         public void habilitarPantalla()
@@ -178,7 +177,7 @@ namespace PPAI
                 label4.Text = "Resumen Vinos de bodega :  ";
 
             }
-            MessageBox.Show("Se ha limpiado la selección de la bodega y el contenido de la grilla de vinos.");
+            MessageBox.Show("Se ha limpiado la selección de la bodega y el contenido de sus de vinos.");
 
         }
     }

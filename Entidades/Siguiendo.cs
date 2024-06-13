@@ -30,7 +30,7 @@
             }
         }
         //constructor
-        public Siguiendo() { }
+        
         public Siguiendo(DateTime fechaInicio, DateTime fechaFin)
         {
             this.fechaInicio = fechaInicio;

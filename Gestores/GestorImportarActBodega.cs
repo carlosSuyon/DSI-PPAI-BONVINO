@@ -17,8 +17,8 @@ namespace PPAI.Gestores
         private PantallaImportadorActBodega pantalla;
 
         private Bodega bodegaElegida;
-        private List<Bodega> bodegas;
 
+        private List<Bodega> bodegas;
         private List<Enofilo> enofilosSeguidores;
         private List<string> enofilosANotificar;
 
@@ -27,15 +27,14 @@ namespace PPAI.Gestores
 
         private List<Maridaje> maridajes;
         private List<TipoUva> tiposUva;
-
-        //private List<Vino> vinosDelSistema;
-
+        
         private APISistemaBodega APISistemaBodega;
         private InterfazNotificacionPush interfazNotificacionPush;
 
         // constructor 
-        public GestorImportarActBodega() { }
+        
         public GestorImportarActBodega(PantallaImportadorActBodega pantalla){
+
             this.bodegas = new List<Bodega>();  
             this.tiposUva = new List<TipoUva>(); 
             this.vinosImportados = new List<VinosSistemaBodega>();
@@ -44,15 +43,18 @@ namespace PPAI.Gestores
             this.enofilosSeguidores = new List<Enofilo>();
             this.enofilosANotificar = new List<string>();
             this.pantalla = pantalla;
-            //this.vinosDelSistema = new List<Vino>();    
-
+            
+            //crea y carga los objetos necesarios para ejecutar el cu.
             this.load();
         }
-        private void load()
-        {
+        private void load(){
+
             //Esta clase se utiliza para generar números aleatorios en C#.
             Random random = new Random();
+
             List<Vino> vinosDelSistema = new List<Vino>();
+            
+            // string necesarios para crear mis objetos
             string[] variedadesTintas = new string[]
             {
                 "Merlot",
@@ -118,8 +120,6 @@ namespace PPAI.Gestores
                 "Soto", "Delgado", "Ortiz", "Ramos", "Guerrero", "Molina", "Castro", "Suárez", "Domínguez", "Alvarez",
                 "Vega", "Paredes", "Rojas", "Campos", "Mejía", "Herrera", "Aguilar", "Santos", "Montes", "Peña"
             };
-
-            // Definición de nombres de vinos populares y bodegas
             string[] nombresVinosPopulares = new string[]
             {
                 "Malbec Reserva",
@@ -153,33 +153,6 @@ namespace PPAI.Gestores
                 "Chianti Riserva",
                 "Pinot Grigio delle Venezie"
             };
-
-
-            // Tipos de Uva del sistema
-
-            for (int i = 0; i < variedadesTintas.Length; i++)
-            {
-                string nombre = variedadesTintas[i];
-                string descripcion = "Descripcion uva(Tinta) :" + nombre;
-                TipoUva tip = new TipoUva(descripcion, nombre);
-                this.tiposUva.Add(tip);
-            }
-            for (int i = 0; i < variedadesBlancas.Length; i++)
-            {
-                string nombre = variedadesBlancas[i];
-                string descripcion = "Descripción uva(Blanca): " + nombre;
-                TipoUva tip = new TipoUva(descripcion, nombre);
-                this.tiposUva.Add(tip);
-            }
-
-            // Maridajes del sistema
-            for (int i = 0; i < maridajeDescripciones.Length; i++)
-            {
-                string descripcion = maridajeDescripciones[i];
-                string nombre = "Maridaje" + (i + 1);
-                Maridaje maridaje = new Maridaje(descripcion, nombre);
-                this.maridajes.Add(maridaje);
-            }
             string[] nombreBodegas = new string[]
             {
                 "Catena Zapata",
@@ -193,15 +166,40 @@ namespace PPAI.Gestores
                 "Bodega La Rural",
                 "Bodega Vistalba",
                 "Bodega Familia Schroeder",
-    
-            };
 
-            // Bodegas
-            for (int b = 0; b < (nombreBodegas.Length-1); b++)
+            };
+            
+            // Tipos de Uva del sistema
+
+            for (int i = 1; i <= variedadesTintas.Length; i++)
+            {
+                string nombre = variedadesTintas[i-1];
+                string descripcion = "Descripcion uva(Tinta) :" + nombre;
+                TipoUva tip = new TipoUva(descripcion, nombre);
+                this.tiposUva.Add(tip);
+            }
+            for (int i = 1; i < variedadesBlancas.Length; i++)
+            {
+                string nombre = variedadesBlancas[i-1];
+                string descripcion = "Descripción uva(Blanca): " + nombre;
+                TipoUva tip = new TipoUva(descripcion, nombre);
+                this.tiposUva.Add(tip);
+            }
+
+            // Maridajes del sistema
+            for (int i = 1; i <= maridajeDescripciones.Length; i++)
+            {
+                string descripcion = maridajeDescripciones[i - 1];
+                string nombre = "Maridaje" + (i-1 );
+                Maridaje maridaje = new Maridaje(descripcion, nombre);
+                this.maridajes.Add(maridaje);
+            }
+            
+            // Bodegas del sistema
+            for (int b = 1; b <= (nombreBodegas.Length); b++)
             {
                 // nombre
-                //int indiceAleatorio = random.Next(nombreBodegas.Length);
-                string nombreBodega = nombreBodegas[b];
+                string nombreBodega = nombreBodegas[b-1];
 
                 // fechaUltimaActualizacion random
                 int año = random.Next(2023, 2025);
@@ -259,7 +257,7 @@ namespace PPAI.Gestores
                 var bodegaAleatoria = this.bodegas[indiceAleatorio];
 
                 // Crear instancia de Vino con los datos generados
-                string nombreVino = nombresVinosPopulares[i];
+                string nombreVino = nombresVinosPopulares[i - 1];
                 string linkImg = "https://picsum.photos/" + i;
 
                 Vino vino = new Vino(añoAñada.ToString(), fechaActualizacion, linkImg, nombreVino, notaDeCata, precioAleatorio, bodegaAleatoria);
@@ -283,8 +281,9 @@ namespace PPAI.Gestores
 
                 Usuario usuario = new Usuario(password, nombreEnofilo, activo);
                 Enofilo enofilo = new Enofilo(apellidoEnofilo, linkImgPerfil, nombreEnofilo, usuario);
+                
                 // Vinos favoritos del Enofilo
-                for (int j = 1; j <= random.Next(vinosDelSistema.Count); j++)
+                for (int j = 0; j <= random.Next(vinosDelSistema.Count); j++)
                 {
                     if (enofilo.Favorito == null)
                     {
@@ -295,8 +294,9 @@ namespace PPAI.Gestores
 
                 // Seguidos del enofilo y cada seguido conoce una bodega o un enofilo
                 List<Siguiendo> seguidos = new List<Siguiendo>();
+                
                 int cantidadSeguidos = random.Next(1, 10);
-                for (int k = 0; k < cantidadSeguidos; k++)
+                for (int k = 1; k <= cantidadSeguidos; k++)
                 {
                     DateTime fechaInicio = DateTime.Now.AddDays(random.Next(1, 365));
                     DateTime fechaFin = DateTime.Now.AddDays(random.Next(1, 365));
@@ -309,38 +309,31 @@ namespace PPAI.Gestores
                     }
                     else // 50% probabilidad de seguir un enófilo
                     {
-                       if(this.enofilosSeguidores.Count > 0)
+                        if (this.enofilosSeguidores.Count > 0)
                         {
                             siguiendo.Enofilo = this.enofilosSeguidores[random.Next(this.enofilosSeguidores.Count)];
                         }
-                        else
-                        {
-                            siguiendo.Bodega = this.bodegas[random.Next(this.bodegas.Count)];
-                        }
+                        else { siguiendo.Bodega = this.bodegas[random.Next(this.bodegas.Count)];  }
+                       
                     }
-
                     seguidos.Add(siguiendo);
                 }
                 enofilo.Seguido = seguidos;
-
                 this.enofilosSeguidores.Add(enofilo);
             }
-
         }
 
-        //metodos 
-        public void importarActVinosBodega()
-        {
+        //metodos del gestor 
+        public void importarActVinosBodega(){
             //Busca y muestra todas las bodegas que tienen actualizaciones disponibles
             List<string> bodegasConActualizacion = new List<string>();
             bodegasConActualizacion = (this.buscarBodegas());
 
-            // muestra en la grilla la bodegas (string) en una grilla
+            // muestra en la grilla las bodegas (string) en una grilla
             pantalla.mostrarBodegas(bodegasConActualizacion);            
         }
 
-         public List<string> buscarBodegas()
-         {
+         public List<string> buscarBodegas(){
             List<string> bodegasParaActualizar = new List<string>();
 
             DateTime fechaActual = this.getFechaActual();
@@ -351,10 +344,10 @@ namespace PPAI.Gestores
                 {
                     bodegasParaActualizar.Add(bodega.Nombre);
                 }
-            }
-            
+            }            
             return bodegasParaActualizar; 
          }
+
         public DateTime getFechaActual()
         {
             // tomar la fecha actual
@@ -363,7 +356,7 @@ namespace PPAI.Gestores
         }
         public void tomarSelecciónBodega(string bodegaSeleccionada)
         {
-            // buscar segun nombre bodega seleccionada y crear el objeto
+            // buscar segun nombre de bodega seleccionada y selecciona el objeto
             foreach (Bodega  b in this.bodegas)
             {
                 if (b.Nombre == bodegaSeleccionada)
@@ -396,7 +389,7 @@ namespace PPAI.Gestores
         {
             foreach (var v in this.vinosImportados)
             {
-                //valida para c/u de los vinos importados si es un vino para actualizar en la bodega seleccionada
+                //valida para c/u de los vinos importados si es un vino para actualizar o para crear  en la bodega seleccionada
                 
                 if (vinosParaActualizar.Contains(v)) // este vino importado pertenece a la bodega,se actualiza sus parametros
                 {
@@ -478,11 +471,11 @@ namespace PPAI.Gestores
             
             foreach (string[] varietal in varietalesNuevoVino)
             {
-                for(int i = 0;i < this.tiposUva.Count; i++)
+                for(int i = 1;i < this.tiposUva.Count; i++)
                 {
-                    if (this.tiposUva[i].esElTipoUva(varietal[3]))
+                    if (this.tiposUva[i - 1].esElTipoUva(varietal[3]))
                     {
-                        tiposUvaUtil.Add(tiposUva[i]);
+                        tiposUvaUtil.Add(tiposUva[i - 1 ]);
                     }
                 }
             }
@@ -496,16 +489,14 @@ namespace PPAI.Gestores
             foreach (Enofilo enofilo in this.enofilosSeguidores)
             {
                 if (enofilo.sosSeguidorBodega(this.bodegaElegida))
-                {
-                    // corregir en el diagrama de secuencia el metodo *notificarNovedadVinoParaBodega(), no lleva asterisco
+                {               
                     this.enofilosANotificar.Add(enofilo.Usuario.getNombre() +" " + enofilo.Apellido);
                 }
             }
             this.interfazNotificacionPush = new InterfazNotificacionPush();
-
-            if (this.enofilosANotificar.Count > 0)
+            foreach (var enofilo in this.enofilosANotificar)
             {
-                this.interfazNotificacionPush.notificarNovedadVinoParaBodega(this.enofilosANotificar);
+                this.interfazNotificacionPush.notificarNovedadVinoParaBodega(enofilo);
             }
 
         }             

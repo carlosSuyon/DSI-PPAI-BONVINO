@@ -38,7 +38,7 @@ namespace PPAI.Entidades
         //metodos
         public Boolean sosSeguidorBodega(Bodega bodega)
         {
-            foreach (Siguiendo s in this.seguido)
+            foreach (Siguiendo s in this.Seguido)
             {
                 if (s.sosDeBodega(bodega)){
                     
@@ -48,6 +48,10 @@ namespace PPAI.Entidades
             return false;
 
         }
-        
+
+        public string getNombreUsuario()
+        {
+            return this.Usuario.getNombre();
+        }
     }
 }

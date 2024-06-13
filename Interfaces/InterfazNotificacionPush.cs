@@ -9,13 +9,10 @@ namespace PPAI.Interfaces
 {
     public class InterfazNotificacionPush
     {
-        public void notificarNovedadVinoParaBodega(List<string> nombreDeEnofilosANotificar)
+        public void notificarNovedadVinoParaBodega(string nombreDeEnofilosANotificar)
         {
-            foreach (var enofilo in nombreDeEnofilosANotificar)
-            {
-               MessageBox.Show($"Enviando notificación a {enofilo}");
-            }
-            MessageBox.Show("Se notifico a los enofilos ");
+
+            MessageBox.Show("Se notifico al enofilo "+ nombreDeEnofilosANotificar);
         }
     }
 }
