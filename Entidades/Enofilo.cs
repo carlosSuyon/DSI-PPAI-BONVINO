@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PPAI.Interfaces;
 
 namespace PPAI.Entidades
 {
-    public class Enofilo
+    public class Enofilo 
     {
         //atributos
         private string apellido;
@@ -27,7 +23,7 @@ namespace PPAI.Entidades
         public Usuario Usuario { get => usuario; set => usuario = value; }
 
         //constructor
-        public Enofilo(string apellido, string imagenPerfil, string nombre,Usuario usu)
+        public Enofilo(string apellido, string imagenPerfil, string nombre, Usuario usu)
         {
             this.Apellido = apellido;
             this.ImagenPerfil = imagenPerfil;
@@ -40,8 +36,9 @@ namespace PPAI.Entidades
         {
             foreach (Siguiendo s in this.Seguido)
             {
-                if (s.sosDeBodega(bodega)){
-                    
+                if (s.sosDeBodega(bodega))
+                {
+
                     return true;
                 }
             }
@@ -52,6 +49,13 @@ namespace PPAI.Entidades
         public string getNombreUsuario()
         {
             return this.Usuario.getNombre();
+        }
+
+        //Metodo polimorfico - interfaz 
+
+        public void Actualizar(List<string> formaNotificacion)
+        {
+             
         }
     }
 }

@@ -1,11 +1,4 @@
-﻿using PPAI.Entidades;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PPAI.Interfaces
+﻿namespace PPAI.Interfaces
 {
     public class VinosSistemaBodega
     {
@@ -15,9 +8,9 @@ namespace PPAI.Interfaces
         private string nombre;
         private string notaDeCataBodega;
         private int precioARS;
-       
+
         private List<string> maridajes;
-       
+
         private List<string[]> varietales;
 
         public VinosSistemaBodega(string añada, DateTime fechaActualizacion, string imagenEtiqueta, string nombre, string notaDeCataBodega, int precioARS)
@@ -30,7 +23,7 @@ namespace PPAI.Interfaces
             this.precioARS = precioARS;
             this.maridajes = new List<string>();
             this.varietales = new List<string[]>();
-            
+
         }
 
         public DateTime FechaActualizacion { get => fechaActualizacion; set => fechaActualizacion = value; }
@@ -43,6 +36,6 @@ namespace PPAI.Interfaces
         public string NotaDeCataBodega { get => notaDeCataBodega; set => notaDeCataBodega = value; }
         public int PrecioARS { get => precioARS; set => precioARS = value; }
         public List<string[]> Varietales { get => varietales; set => varietales = value; }
-        
+
     }
 }

@@ -1,16 +1,10 @@
-﻿using PPAI.Entidades;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PPAI.Interfaces
+﻿namespace PPAI.Interfaces
 {
     public class APISistemaBodega
     {
         private string nombre;
-        public APISistemaBodega(string nombre) {
+        public APISistemaBodega(string nombre)
+        {
             this.nombre = nombre;
         }
         internal List<VinosSistemaBodega> ObtenerActualizacionesBodega(string nombreBodega)
@@ -82,7 +76,7 @@ namespace PPAI.Interfaces
                 "Moscato d'Asti",
                 "Chianti Riserva",
                 "Pinot Grigio delle Venezie",
-    
+
                 "Lambrusco Amabile",
                 "Gewürztraminer Select",
                 "Gamay Beaujolais Nouveau",
@@ -113,14 +107,14 @@ namespace PPAI.Interfaces
             Random rand = new Random();
 
             List<VinosSistemaBodega> vinos = new List<VinosSistemaBodega>();
-            
-            for (int i = 0; i < 10; i++)
+
+            for (int i = 0; i < 6; i++)
             {
                 // Generar datos para el vino
                 int añoAñada = rand.Next(1950, 2025);
                 DateTime fechaActualizacion = DateTime.Now;
                 string imagenEtiqueta = $"Etiqueta_{i}";
-                string nombre = nombresVinosPopulares[rand.Next(0, nombresVinosPopulares.Length-1)];
+                string nombre = nombresVinosPopulares[rand.Next(0, nombresVinosPopulares.Length - 1)];
                 string notaDeCataBodega = notasDeCata[i];
                 int precioARS = rand.Next(500, 50000);
 
@@ -144,8 +138,8 @@ namespace PPAI.Interfaces
                     string nV = $"Varietal : {j}";
                     string dV = $"Vino varietal con predominancia de una variedad de uva";
                     string pC = rand.Next(80, 101).ToString(); // Entre 80% y 100%
-                    string tU = tipoUva[rand.Next(0,tipoUva.Length)];
-                    
+                    string tU = tipoUva[rand.Next(0, tipoUva.Length)];
+
                     string[] v = new string[] { nV, dV, pC, tU };
                     varietales.Add(v);
                 }

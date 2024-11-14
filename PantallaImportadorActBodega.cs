@@ -1,14 +1,5 @@
 ﻿using PPAI.Entidades;
 using PPAI.Gestores;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace PPAI
 {
@@ -101,7 +92,7 @@ namespace PPAI
             {
                 foreach (var objeto in vinos)
                 {
-                    
+
                     DataGridViewRow fila = new DataGridViewRow();
 
                     DataGridViewCell nombreVino = new DataGridViewTextBoxCell();
@@ -175,7 +166,7 @@ namespace PPAI
                 gdrVinosBodega.Visible = false;
                 label4.Visible = false;
                 label4.Text = "Resumen Vinos de bodega :  ";
-
+                this.miGestor.limpiarObserver();
             }
             MessageBox.Show("Se ha limpiado la selección de la bodega y el contenido de sus de vinos.");
 

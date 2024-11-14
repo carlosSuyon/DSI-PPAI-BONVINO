@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PPAI.Entidades
+﻿namespace PPAI.Entidades
 {
     public class TipoUva
     {
@@ -21,10 +15,10 @@ namespace PPAI.Entidades
         public string Descripcion { get => descripcion; set => descripcion = value; }
 
         public Boolean esElTipoUva(string tipoUvaDelNuevoVino)
-        {       
+        {
             if (this.nombre == tipoUvaDelNuevoVino)
             {
-                   return true;
+                return true;
             }
             return false;
         }

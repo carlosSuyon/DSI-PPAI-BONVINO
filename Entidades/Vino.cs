@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
-
-namespace PPAI.Entidades
+﻿namespace PPAI.Entidades
 {
     public class Vino
     {
@@ -32,7 +25,7 @@ namespace PPAI.Entidades
 
         //constructor
         public Vino() { }
-        public Vino(string añada, DateTime fechaActualización, string imagenEtiqueta, string nombre, string notaDeCataBodega, int precioARS,Bodega bodega)
+        public Vino(string añada, DateTime fechaActualización, string imagenEtiqueta, string nombre, string notaDeCataBodega, int precioARS, Bodega bodega)
         {
             this.añada = añada;
             this.fechaActualizacion = fechaActualización;
@@ -40,46 +33,52 @@ namespace PPAI.Entidades
             this.nombre = nombre;
             this.notaDeCataBodega = notaDeCataBodega;
             this.precioARS = precioARS;
-            this.Bodega = bodega; 
-            this.maridaje = new List<Maridaje>();     
+            this.Bodega = bodega;
+            this.maridaje = new List<Maridaje>();
             this.varietal = new List<Varietal>();
         }
         //metodos
-        public void crearVarietal(List<string[]>varietales,List<TipoUva> tiposDeUva) {
+        public void crearVarietal(List<string[]> varietales, List<TipoUva> tiposDeUva)
+        {
             foreach (string[] varietal in varietales)
             {
                 string nV = varietal[0];
                 string dV = varietal[1];
                 int pC = int.Parse(varietal[2]);
                 TipoUva uva = new TipoUva();
-                for (int i = 0; i < tiposDeUva.Count; i++) {
+                for (int i = 0; i < tiposDeUva.Count; i++)
+                {
                     uva = tiposDeUva[i];
                 }
-                Varietal v = new Varietal(nV, dV, pC,uva);
+                Varietal v = new Varietal(nV, dV, pC, uva);
                 this.Varietal.Add(v);
             }
 
         }
-        public Boolean esDeBodega(string nombreVino) {
-            
-            if ( this.nombre == nombreVino )
+        public Boolean esDeBodega(string nombreVino)
+        {
+
+            if (this.nombre == nombreVino)
             {
                 return true;
             }
             return false;
         }
-        public Boolean sosVinoParaActualizar(string nombreDeVinoParaActualizar){
+        public Boolean sosVinoParaActualizar(string nombreDeVinoParaActualizar)
+        {
             if (this.Nombre == nombreDeVinoParaActualizar)
             {
                 return true;
             }
             return false;
         }
-         
-        public Boolean esActualizable(){
-            return false;   
+
+        public Boolean esActualizable()
+        {
+            return false;
         }
-        public String getNombre(){ 
+        public String getNombre()
+        {
             return this.nombre;
         }
 
@@ -93,7 +92,7 @@ namespace PPAI.Entidades
             this.precioARS = precio;
         }
 
-        public void setImagenEtiqueta( string imagen)
+        public void setImagenEtiqueta(string imagen)
         {
             this.imagenEtiqueta = imagen;
         }

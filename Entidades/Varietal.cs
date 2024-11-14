@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PPAI.Entidades
+﻿namespace PPAI.Entidades
 {
     public class Varietal
     {
@@ -13,7 +7,7 @@ namespace PPAI.Entidades
         private int porcentajeComposicion;
 
         private TipoUva tipoUva;
-        public  Varietal(string nombre, string descripcion, int porcentajeComposicion, TipoUva tipoUva)
+        public Varietal(string nombre, string descripcion, int porcentajeComposicion, TipoUva tipoUva)
         {
             this.nombre = nombre;
             this.descripcion = descripcion;

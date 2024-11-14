@@ -5,7 +5,8 @@
         private string descripcion;
         private string nombre;
 
-        public Maridaje(string descripcion,string nombre){
+        public Maridaje(string descripcion, string nombre)
+        {
             this.descripcion = descripcion; this.nombre = nombre;
         }
 
@@ -16,7 +17,7 @@
         {
             if (this.nombre == maridaje)
             {
-                return true;    
+                return true;
             }
             return false;
         }

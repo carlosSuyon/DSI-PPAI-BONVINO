@@ -12,7 +12,7 @@
             this.nombre = nombre;
             this.premium = premium;
         }
-        public string getNombre() {  return nombre; }   
+        public string getNombre() { return nombre; }
     }
 
 }

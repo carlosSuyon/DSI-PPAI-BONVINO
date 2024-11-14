@@ -30,7 +30,7 @@
             }
         }
         //constructor
-        
+
         public Siguiendo(DateTime fechaInicio, DateTime fechaFin)
         {
             this.fechaInicio = fechaInicio;
@@ -41,14 +41,15 @@
         public DateTime GetFechaFin() { return fechaFin; }
 
         public void setFechaFin(DateTime nuevaFechaFin) { this.fechaFin = nuevaFechaFin; }
-        public void setFechaInicio(DateTime nuevaFechaInicio) { this.fechaInicio = nuevaFechaInicio;}
+        public void setFechaInicio(DateTime nuevaFechaInicio) { this.fechaInicio = nuevaFechaInicio; }
 
         // metodos 
 
-        public Boolean sosDeBodega(Bodega bodega) {
+        public Boolean sosDeBodega(Bodega bodega)
+        {
             Boolean x = false;
             x = (this.Bodega != null && this.Bodega.Equals(bodega));
-            return x ;
+            return x;
         }
 
     }
